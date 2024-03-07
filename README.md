@@ -1,6 +1,11 @@
 
 # fillpattern
 
+<!-- badges: start -->
+
+[![R-CMD-check](https://github.com/cmmr/fillpattern/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/cmmr/fillpattern/actions/workflows/R-CMD-check.yaml)
+<!-- badges: end -->
+
 ## Overview
 
 `fillpattern` streamlines the process of adding distinctive yet
@@ -63,7 +68,7 @@ grid.polygon(gp = gpar(fill = fill_pattern("brick")), x = c(6,7,5)/8, y = c(7,1,
 
 ## Basic Patterns
 
-Use any of the pattern names below in `fill_pattern()` or
+Use any of these pattern names in `fill_pattern()` or
 `scale_fill_pattern()`.
 
 ![](man/figures/README-unnamed-chunk-5-1.png)<!-- -->
