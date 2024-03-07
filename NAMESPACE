@@ -1,9 +1,12 @@
 import(grid)
 importFrom(ggplot2, pattern_alpha)
+importFrom(methods, formalArgs)
+importFrom(utils, head, tail)
+
 export(fill_pattern)
-export(fill_pattern_list)
 export(fillPatternGrob)
 export(scale_fill_pattern)
 export(unit)
+
 S3method(makeContent, fill_pattern)
 S3method(pattern_alpha, GridFillPattern)

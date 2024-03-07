@@ -1,20 +1,23 @@
 Package: fillpattern
 Type: Package
-Title: Patterned Fills for Grobs and 'ggplot2' Geoms
-Version: 0.1.0
-Date: 2024-03-04
-Authors@R:
-    person("Daniel P.", "Smith", 
-    email = "dansmith01@gmail.com", 
-    role  = c("aut", "cre", "cph"),
-    comment = c(ORCID = "0000-0002-2479-2044"))
+Title: Patterned Fills for 'ggplot2' and 'grid' Graphics
+Version: 1.0.0
+Date: 2024-03-07
+Authors@R: c(
+    person("Daniel P.", "Smith", , "dansmith01@gmail.com", role  = c("aut", "cre"),
+           comment = c(ORCID = "0000-0002-2479-2044")),
+    person("Alkek Center for Metagenomics and Microbiome Research", role = c("cph", "fnd"))
+  )
 Maintainer: Daniel P. Smith <dansmith01@gmail.com>
-Description: Ten line-based geometric patterns, with customizable scaling, 
-    rotation, color, fill, line type, and line width. 
-    Compatible with ggplot2 geoms.
+Description: Adds distinctive yet unobtrusive geometric patterns where solid 
+    color fills are normally used. Patterned figures look just as 
+    professional when viewed by colorblind readers or when printed in black 
+    and white. The dozen included patterns are customizable in terms of scale,
+    rotation, color, fill, line type, and line width. Compatible with the 
+    'ggplot2' package as well as 'grid' graphics.
 URL: https://cmmr.github.io/fillpattern, https://github.com/cmmr/fillpattern
 BugReports: https://github.com/cmmr/fillpattern/issues
-License: AGPL-3.0-or-later
+License: AGPL (>= 3) + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.1
@@ -24,8 +27,10 @@ Config/testthat/parallel: true
 Depends: R (>= 4.3.0)
 Imports:
     ggplot2 (>= 3.5),
-    grid (>= 4.2)
+    grDevices,
+    grid (>= 4.2),
+    methods,
+    utils
 Suggests:
     ragg,
-    testthat,
-    vdiffr
+    testthat (>= 3.0.0)
