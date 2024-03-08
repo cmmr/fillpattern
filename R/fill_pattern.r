@@ -45,10 +45,8 @@
 #'          `length(patterns)`.
 #' 
 #' 
-#' @return \itemize{
-#'           \item{`fill_pattern()` - }{ A list of `grid::pattern()` objects. }
-#'           \item{`fillPatternGrob()` - }{ A `grid::gTree()` object. }
-#'         }
+#' @return `fill_pattern()` returns a list of `grid::pattern()` objects; 
+#'         `fillPatternGrob()` returns a `grid::gTree()` object.
 #' 
 #' 
 #' @section Pattern Names:

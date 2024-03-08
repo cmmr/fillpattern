@@ -65,10 +65,8 @@ transformed data that ggbuild has constructed for this grob
 Default: \code{NULL}}
 }
 \value{
-\itemize{
-\item{\code{fill_pattern()} - }{ A list of \code{grid::pattern()} objects. }
-\item{\code{fillPatternGrob()} - }{ A \code{grid::gTree()} object. }
-}
+\code{fill_pattern()} returns a list of \code{grid::pattern()} objects;
+\code{fillPatternGrob()} returns a \code{grid::gTree()} object.
 }
 \description{
 Patterned Fills for Grobs

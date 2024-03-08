@@ -12,7 +12,7 @@ Maintainer: Daniel P. Smith <dansmith01@gmail.com>
 Description: Adds distinctive yet unobtrusive geometric patterns where solid 
     color fills are normally used. Patterned figures look just as 
     professional when viewed by colorblind readers or when printed in black 
-    and white. The dozen included patterns are customizable in terms of scale,
+    and white. The dozen included patterns can be customized in terms of scale,
     rotation, color, fill, line type, and line width. Compatible with the 
     'ggplot2' package as well as 'grid' graphics.
 URL: https://cmmr.github.io/fillpattern/, https://github.com/cmmr/fillpattern
