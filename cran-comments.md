@@ -2,4 +2,8 @@
 
 0 errors | 0 warnings | 1 note
 
-* This is a new release.
+* Days since last update: 1
+
+  Discovered too late that conda-forge requires depending on R <= 4.1
+  
+  Will adhere to recommended update frequency going forward.
