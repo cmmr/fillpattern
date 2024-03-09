@@ -4,6 +4,8 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/cmmr/fillpattern/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/cmmr/fillpattern/actions/workflows/R-CMD-check.yaml)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/fillpattern)](https://CRAN.R-project.org/package=fillpattern)
 <!-- badges: end -->
 
 ## Overview
