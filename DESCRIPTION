@@ -1,7 +1,7 @@
 Package: fillpattern
 Type: Package
 Title: Patterned Fills for 'ggplot2' and 'grid' Graphics
-Version: 1.0.0
+Version: 1.0.0.9000
 Date: 2024-03-08
 Authors@R: c(
     person("Daniel P.", "Smith", , "dansmith01@gmail.com", role  = c("aut", "cre"),
