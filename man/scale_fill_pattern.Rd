@@ -15,14 +15,15 @@ scale_fill_pattern(
   height = NA,
   lwd = 1,
   lty = "solid",
-  fun = NULL
+  fun = NULL,
+  min_size = 2
 )
 }
 \arguments{
 \item{patterns}{A vector of pattern names that will be subset or recycled
 as needed to match the levels of the \code{aes()} fill variable. If
 integers are provided, they are mapped to predefined patterns.
-See "Details and "Pattern Names" sections below. Default: \code{seq_len}}
+See "Details" and "Pattern Names" sections below. Default: \code{seq_len}}
 
 \item{fg}{Foreground color for the pattern's lines, or \code{NA} to use the
 color scale for the \code{aes()} color variable. Default: \code{NA}}
@@ -57,8 +58,14 @@ See \code{\link[graphics:par]{graphics::par()}} for additional details. Default:
 before rendering. Should accept two parameters: \code{env}, an
 environment that the function should modify, and \code{row}, the row of
 transformed data that ggbuild has constructed for this grob
-(including aes mappings). The return value is not used.
-Default: \code{NULL}}
+(including aes mappings). The function should return a gTree or an
+error to force returning from the parent function immediately, or
+\code{NULL} to continue processing with the updated \code{env}. Default: \code{NULL}}
+
+\item{min_size}{Minimum size of the pattern to draw. Applies to both width
+and height. Useful for avoiding CPU and memory overhead on tiny
+graphical elements. Assumed to be millimeters unless set otherwise
+with \code{\link[=unit]{unit()}}. Default: \code{2}}
 }
 \value{
 A \code{\link[ggplot2:discrete_scale]{ggplot2::discrete_scale()}} object.

@@ -35,8 +35,14 @@
 #'        before rendering. Should accept two parameters: `env`, an 
 #'        environment that the function should modify, and `row`, the row of 
 #'        transformed data that ggbuild has constructed for this grob 
-#'        (including aes mappings). The return value is not used.
-#'        Default: `NULL`
+#'        (including aes mappings). The function should return a gTree or an 
+#'        error to force returning from the parent function immediately, or 
+#'        `NULL` to continue processing with the updated `env`. Default: `NULL`
+#' 
+#' @param min_size   Minimum size of the pattern to draw. Applies to both width 
+#'        and height. Useful for avoiding CPU and memory overhead on tiny 
+#'        graphical elements. Assumed to be millimeters unless set otherwise 
+#'        with [unit()]. Default: `2`
 #' 
 #' 
 #' @details `fillPatternGrob()` expects a single value for each parameter. 
@@ -109,7 +115,8 @@
 
 fill_pattern <- function (
     patterns = "brick", fg = "black", bg = "transparent",
-    angle = 0, width = 5, height = NA, lwd = 1, lty = "solid", fun = NULL ) {
+    angle = 0, width = 5, height = NA, lwd = 1, lty = "solid", fun = NULL,
+    min_size = 2 ) {
   
   n <- length(patterns)
   if (n == 0) return (list())
@@ -132,15 +139,16 @@ fill_pattern <- function (
     grid::pattern(
       group = FALSE,
       grob  = fillPatternGrob(
-        pattern = get_i(patterns, i),
-        fg      = get_i(fg,       i),
-        bg      = get_i(bg,       i),
-        angle   = get_i(angle,    i),
-        width   = get_i(width,    i),
-        height  = get_i(height,   i),
-        lwd     = get_i(lwd,      i),
-        lty     = get_i(lty,      i),
-        fun     = get_i(fun,      i) ))
+        pattern  = get_i(patterns, i),
+        fg       = get_i(fg,       i),
+        bg       = get_i(bg,       i),
+        angle    = get_i(angle,    i),
+        width    = get_i(width,    i),
+        height   = get_i(height,   i),
+        lwd      = get_i(lwd,      i),
+        lty      = get_i(lty,      i),
+        fun      = get_i(fun,      i),
+        min_size = get_i(min_size,   i) ))
   })
   
   
@@ -160,23 +168,27 @@ fill_pattern <- function (
 #' @export
 fillPatternGrob <- function (
     pattern = "brick", fg = "black", bg = "transparent",
-    angle = 0, width = 5, height = NA, lwd = 1, lty = "solid", fun = NULL ) {
+    angle = 0, width = 5, height = NA, lwd = 1, lty = "solid", fun = NULL,
+    min_size = 2 ) {
   
   
   for (i in setdiff(formalArgs(fillPatternGrob), 'fun'))
     if (length(val <- get(i, inherits = FALSE)) != 1)
       stop("`", i, "` should be one value, not ", length(val), ".")
   
+  if (!is.unit(min_size)) min_size <- unit(min_size, 'mm')
+  
   grid::gTree(
-    pattern = pattern,
-    fg      = fg,
-    bg      = bg,
-    angle   = angle,
-    width   = width,
-    height  = height,
-    lwd     = lwd,
-    lty     = lty,
-    fun     = fun,
-    cl      = "fill_pattern" )
+    pattern  = pattern,
+    fg       = fg,
+    bg       = bg,
+    angle    = angle,
+    width    = width,
+    height   = height,
+    lwd      = lwd,
+    lty      = lty,
+    fun      = fun,
+    min_size = min_size,
+    cl       = "fill_pattern" )
 }
 

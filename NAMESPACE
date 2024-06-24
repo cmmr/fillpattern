@@ -1,6 +1,6 @@
 import(grid)
 importFrom(ggplot2, pattern_alpha)
-importFrom(methods, formalArgs)
+importFrom(methods, formalArgs, is)
 importFrom(utils, head, tail)
 
 export(fill_pattern)

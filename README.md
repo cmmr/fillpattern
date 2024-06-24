@@ -3,12 +3,9 @@
 
 <!-- badges: start -->
 
-[![dev build
-status](https://github.com/cmmr/fillpattern/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/cmmr/fillpattern/actions/workflows/R-CMD-check.yaml)
-[![CRAN
-version](https://www.r-pkg.org/badges/version/fillpattern)](https://CRAN.R-project.org/package=fillpattern)
-[![Anaconda
-version](https://anaconda.org/conda-forge/r-fillpattern/badges/version.svg)](https://anaconda.org/conda-forge/r-fillpattern)
+[![dev](https://github.com/cmmr/fillpattern/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/cmmr/fillpattern/actions/workflows/R-CMD-check.yaml)
+[![cran](https://www.r-pkg.org/badges/version/fillpattern)](https://CRAN.R-project.org/package=fillpattern)
+[![conda](https://anaconda.org/conda-forge/r-fillpattern/badges/version.svg)](https://anaconda.org/conda-forge/r-fillpattern)
 <!-- badges: end -->
 
 ## Overview
@@ -84,8 +81,8 @@ For each basic pattern, you can specify the foreground color, background
 color, line width/style, tile size/rotation, and more through arguments
 to `fill_pattern()` and `scale_fill_pattern()`.
 
-Most modifications can be also be specified as part of the pattern name
-(shown below).
+Most modifications can be specified as part of the pattern name (shown
+below).
 
 ![](man/figures/README-unnamed-chunk-6-1.png)<!-- -->
 

@@ -5,7 +5,7 @@
 #' @param patterns   A vector of pattern names that will be subset or recycled 
 #'        as needed to match the levels of the `aes()` fill variable. If 
 #'        integers are provided, they are mapped to predefined patterns. 
-#'        See "Details and "Pattern Names" sections below. Default: `seq_len`
+#'        See "Details" and "Pattern Names" sections below. Default: `seq_len`
 #' 
 #' @param fg   Foreground color for the pattern's lines, or `NA` to use the 
 #'        color scale for the `aes()` color variable. Default: `NA`
@@ -73,7 +73,8 @@ scale_fill_pattern <- function (
     height   = NA, 
     lwd      = 1, 
     lty      = "solid",
-    fun      = NULL ) {
+    fun      = NULL,
+    min_size = 2 ) {
   
   
   #________________________________________________________
@@ -113,7 +114,8 @@ scale_fill_pattern <- function (
           height   = get_i(height,   i), 
           lwd      = get_i(lwd,      i), 
           lty      = get_i(lty,      i), 
-          fun      = get_i(fun,      i) ))
+          fun      = get_i(fun,      i),
+          min_size = get_i(min_size, i) ))
     })
     
     
@@ -125,6 +127,7 @@ scale_fill_pattern <- function (
     
     return (fills)
   }
+  
   
   ggplot2::discrete_scale(aesthetics = "fill",  palette = fill_palette)
 }
@@ -180,8 +183,15 @@ pattern_alpha.GridFillPattern <- function (x, alpha) {
       
       # This grob's aes() mappings.
       if (nrow(dat) >= i) row <- as.list(dat[i,])
+      
     }
   }
+  
+  
+  # Skip zero-width or zero-height grobs.
+  if (all(c('xmin', 'xmax', 'ymin', 'ymax') %in% names(row)))
+    if (row$xmin == row$xmax || row$ymin == row$ymax)
+      return (grid::pattern(grid::rectGrob()))
   
   
   # Apply lightened color mapping to fg/bg if they are NA.
