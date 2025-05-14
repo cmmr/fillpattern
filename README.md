@@ -3,9 +3,10 @@
 
 <!-- badges: start -->
 
-[![dev](https://github.com/cmmr/fillpattern/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/cmmr/fillpattern/actions/workflows/R-CMD-check.yaml)
 [![cran](https://www.r-pkg.org/badges/version/fillpattern)](https://CRAN.R-project.org/package=fillpattern)
 [![conda](https://anaconda.org/conda-forge/r-fillpattern/badges/version.svg)](https://anaconda.org/conda-forge/r-fillpattern)
+[![downloads](https://cranlogs.r-pkg.org/badges/grand-total/fillpattern)](https://cranlogs.r-pkg.org/)
+
 <!-- badges: end -->
 
 ## Overview

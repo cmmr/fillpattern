@@ -32,7 +32,7 @@
 #' @details All of the parameters can accept a vector of values or a function 
 #'          that takes `n` as an argument and returns the value(s) to use. The 
 #'          values are subset or recycled as needed to obtain the same number 
-#'          as `length(levels(fill))`, where fill is the variable defined by 
+#'          as `nlevels(fill)`, where fill is the variable defined by 
 #'          `aes(fill = )`.
 #' 
 #' 
