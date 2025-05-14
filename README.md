@@ -31,8 +31,8 @@ package, `fillpattern`:
 install.packages("fillpattern")
 
 # Or the development version from GitHub:
-install.packages("remotes")
-remotes::install_github("cmmr/fillpattern")
+install.packages("pak")
+pak::pak("cmmr/fillpattern")
 ```
 
 ## Usage
