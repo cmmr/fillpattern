@@ -27,26 +27,26 @@ draw_hex_logo_ggplot <- function() {
     
     # Hexagon Background (White fill, Black border)
     geom_polygon(
-      data = hex_data, 
-      aes(x = x, y = y), 
-      fill = "white", 
-      color = "black", 
-      linewidth = 1
+      data  = hex_data, 
+      aes(x = x, y = y),
+      fill  = "#F5F5F5",  # Light Gray
+      color = "#4682B4",  # Steel Blue
+      linewidth = 1.25
     ) +
     
     # Patterned Bars
     geom_rect(
       data = bar_data,
       aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax, fill = id),
-      color = "black",
-      linewidth = 0.5
+      color = "#333333",
+      linewidth = 0.6
     ) +
     
     # Fill Pattern Scale
     scale_fill_pattern(
       patterns = c("stripe45", "brick", "hex"),
       fg       = c("firebrick", "steelblue", "forestgreen"),
-      bg       = "white",
+      bg       = "#F5F5F5",
       width    = 1,
       lwd      = 1
     ) +
@@ -56,27 +56,28 @@ draw_hex_logo_ggplot <- function() {
       "segment", 
       x = 0.2, xend = 0.8, 
       y = 0.35, yend = 0.35, 
-      color = "black", 
-      linewidth = 1
+      color = "#333333", 
+      linewidth = 1.2
     ) +
     
     # Text Label
     annotate(
       "text", 
       x = 0.5, y = 0.25, 
-      label = "fillpattern", 
+      label    = "fillpattern", 
       fontface = "bold", 
-      size = 5,  # Size in mm (approx)
-      family = "sans"
+      color    = "#333333", 
+      size     = 5,  # Size in mm (approx)
+      family   = "Segoe UI"
     ) +
     
     # Fix Aspect Ratio and Remove Axes
     coord_fixed(xlim = c(0, 1), ylim = c(0, 1)) +
     theme_void() +
     theme(
-      plot.background = element_rect(fill = "transparent", color = NA),
+      plot.background  = element_rect(fill = "transparent", color = NA),
       panel.background = element_rect(fill = "transparent", color = NA),
-      legend.position = "none" # Hide the legend for the bars
+      legend.position  = "none" # Hide the legend for the bars
     )
   
   return(p)

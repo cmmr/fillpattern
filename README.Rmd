@@ -25,8 +25,6 @@ knitr::opts_chunk$set(
 <!-- badges: end -->
 
 
-## Overview
-
 `fillpattern` streamlines the process of adding distinctive yet unobtrusive geometric patterns in place of solid grob/geom fills. The resultant figures look just as professional when viewed by colorblind readers or when printed in black and white.
 
 Compared to the similar [`ggpattern`](https://coolbutuseless.github.io/package/ggpattern/index.html) package, `fillpattern`:
