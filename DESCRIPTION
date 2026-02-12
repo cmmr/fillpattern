@@ -3,17 +3,21 @@ Type: Package
 Title: Patterned Fills for 'ggplot2' and 'grid' Graphics
 Version: 1.0.3
 Authors@R: c(
-    person("Daniel P.", "Smith", , "dansmith01@gmail.com", role  = c("aut", "cre"),
-           comment = c(ORCID = "0000-0002-2479-2044")),
-    person("Alkek Center for Metagenomics and Microbiome Research", role = c("cph", "fnd"))
-  )
+    person(
+      "Daniel P.", "Smith",
+      email   = "dansmith01@gmail.com",
+      role    = c("aut", "cre"),
+      comment = c(ORCID = "0000-0002-2479-2044")),
+    person(
+      "Alkek Center for Metagenomics and Microbiome Research", 
+      role = c("cph", "fnd") ))
 Maintainer: Daniel P. Smith <dansmith01@gmail.com>
-Description: Adds distinctive yet unobtrusive geometric patterns where solid 
-    color fills are normally used. Patterned figures look just as 
-    professional when viewed by colorblind readers or when printed in black 
-    and white. The dozen included patterns can be customized in terms of scale,
-    rotation, color, fill, line type, and line width. Compatible with the 
-    'ggplot2' package as well as 'grid' graphics.
+Description: Provides geometric patterns to replace solid color fills in
+    statistical graphics. These patterns ensure figures remain distinguishable
+    when viewed by colorblind readers or when printed in black and white. The
+    included patterns can be customized in terms of scale, rotation, color,
+    fill, line type, and line width. Compatible with the 'ggplot2' package as
+    well as 'grid' graphics.
 URL: https://cmmr.github.io/fillpattern/, https://github.com/cmmr/fillpattern
 BugReports: https://github.com/cmmr/fillpattern/issues
 License: MIT + file LICENSE
