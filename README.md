@@ -7,8 +7,8 @@
 
 [![cran](https://img.shields.io/cran/v/fillpattern?logo=r&label=CRAN)](https://CRAN.R-project.org/package=fillpattern)
 [![conda](https://img.shields.io/conda/v/conda-forge/r-fillpattern?logo=anaconda&label=conda)](https://anaconda.org/conda-forge/r-fillpattern)
-[![covr](https://img.shields.io/codecov/c/gh/cmmr/fillpattern?logo=codecov)](https://app.codecov.io/gh/cmmr/fillpattern)
 [![downloads](https://cranlogs.r-pkg.org/badges/grand-total/fillpattern)](https://cranlogs.r-pkg.org/)
+[![covr](https://img.shields.io/codecov/c/gh/cmmr/fillpattern?logo=codecov)](https://app.codecov.io/gh/cmmr/fillpattern)
 <!-- badges: end -->
 
 `fillpattern` streamlines the process of adding distinctive yet
