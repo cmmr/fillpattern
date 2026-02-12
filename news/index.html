@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">fillpattern</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.2.9004</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -32,7 +32,33 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="1.0.2.9001" id="fillpattern-1029001-development-version">fillpattern 1.0.2.9001 (development version)<a class="anchor" aria-label="anchor" href="#fillpattern-1029001-development-version"></a></h2>
+<h2 class="pkg-version" data-toc-text="1.0.3" id="fillpattern-103">fillpattern 1.0.3<a class="anchor" aria-label="anchor" href="#fillpattern-103"></a></h2>
+<div class="section level3">
+<h3 id="new-features-1-0-3">New Features<a class="anchor" aria-label="anchor" href="#new-features-1-0-3"></a></h3>
+<ul><li>
+<strong>Hex Logo:</strong> Added an official hex logo to the package.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="dependency-changes-1-0-3">Dependency Changes<a class="anchor" aria-label="anchor" href="#dependency-changes-1-0-3"></a></h3>
+<ul><li>
+<strong>R Version Requirement:</strong> Bumped the minimum required R version from 4.1.0 to 4.2.0 to ensure compatibility with recent graphics engine features.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-1-0-3">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-1-0-3"></a></h3>
+<ul><li>
+<strong>Size Parsing:</strong> Fixed a bug where size modifier strings ending in a colon (e.g., <code>"brick_8mm:"</code>) were parsed incorrectly, applying the width dimension to the height.</li>
+<li>
+<strong>Unit Validation:</strong> <code>modify_size()</code> now gracefully handles and reports invalid unit strings instead of crashing, and includes support for standard units like <code>"in"</code>, <code>"inches"</code>, and <code>"cm"</code>.</li>
+<li>
+<strong>Background Color:</strong> Fixed an issue in <code><a href="../reference/scale_fill_pattern.html">scale_fill_pattern()</a></code> where the background color was not correctly calculated from the aesthetic mapping when a foreground color was manually specified.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="testing--development-1-0-3">Testing &amp; Development<a class="anchor" aria-label="anchor" href="#testing--development-1-0-3"></a></h3>
+<ul><li>
+<strong>Code Coverage:</strong> Added a comprehensive test suite using <code>testthat</code>, achieving 100% code coverage.</li>
+<li>
+<strong>Badges:</strong> Added a code coverage badge to the README.</li>
+</ul></div>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.0.2" id="fillpattern-102">fillpattern 1.0.2<a class="anchor" aria-label="anchor" href="#fillpattern-102"></a></h2><p class="text-muted">CRAN release: 2024-06-24</p>
