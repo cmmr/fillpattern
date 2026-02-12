@@ -1,7 +1,5 @@
 # fillpattern
 
-## Overview
-
 `fillpattern` streamlines the process of adding distinctive yet
 unobtrusive geometric patterns in place of solid grob/geom fills. The
 resultant figures look just as professional when viewed by colorblind
