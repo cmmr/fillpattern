@@ -1,15 +1,16 @@
 # fillpattern
 
-`fillpattern` streamlines the process of adding distinctive yet
-unobtrusive geometric patterns in place of solid grob/geom fills. The
-resultant figures look just as professional when viewed by colorblind
-readers or when printed in black and white.
+`fillpattern` provides geometric patterns to replace solid color fills
+in statistical graphics. These patterns ensure figures remain
+distinguishable when viewed by colorblind readers or when printed in
+black and white.
 
 Compared to the similar
 [`ggpattern`](https://coolbutuseless.github.io/package/ggpattern/index.html)
 package, `fillpattern`:
 
-- Has no dependencies beyond base R and `ggplot2`.
+- Has no dependencies beyond base R and
+  [`ggplot2`](https://ggplot2.tidyverse.org).
 - Works with `ggplot2::geom_*` functions.
 - Focuses on simple geometric patterns.
 
