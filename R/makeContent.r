@@ -101,6 +101,8 @@ makeContent.fill_pattern <- function (x) {
             
           } else {
             size_mods <- strsplit(part, ':')[[1]]
+            if (grepl(":$", part)) size_mods <- c(size_mods, "")
+            
             width     <- modify_size(width,  'x', head(size_mods, 1))
             height    <- modify_size(height, 'y', tail(size_mods, 1))
           }

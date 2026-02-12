@@ -172,14 +172,14 @@ pattern_alpha.GridFillPattern <- function (x, alpha) {
     # Find all the aes() mappings for all grobs.
     p   <- parent.frame(n = 5)
     dat <- if (exists('coords',     p)) { get('coords',     p)
-    } else if (exists('first_rows', p)) { get('first_rows', p)
+    } else if (exists('first_rows', p)) { get('first_rows', p) # nocov
     } else if (exists('data',       p)) { get('data',       p) }
     
     if (is.data.frame(dat)) {
       
       # Find our Map()/mapply() index.
       i <- try(match.call()$x[[3]], silent = TRUE)
-      if (!is.integer(i)) i <- 1L
+      if (!is.integer(i)) i <- 1L # nocov
       
       # This grob's aes() mappings.
       if (nrow(dat) >= i) row <- as.list(dat[i,])
