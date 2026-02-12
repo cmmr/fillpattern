@@ -1,7 +1,7 @@
 
 <!-- Run `devtools::build_readme()` after editing.  -->
 
-# fillpattern
+# fillpattern <img src="man/figures/logo.png" align="right" width="200" height="200" alt="fillpattern logo" />
 
 <!-- badges: start -->
 

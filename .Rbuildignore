@@ -6,3 +6,4 @@
 ^pkgdown$
 ^LICENSE\.md$
 ^README\.Rmd$
+^rhub_check\.r$

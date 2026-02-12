@@ -3,3 +3,4 @@
 conda/
 cran-comments.md
 fillpattern.Rproj
+rhub_check.r
