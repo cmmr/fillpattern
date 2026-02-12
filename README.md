@@ -1,12 +1,13 @@
 
+<!-- Run `devtools::build_readme()` after editing.  -->
+
 # fillpattern
 
 <!-- badges: start -->
 
-[![cran](https://www.r-pkg.org/badges/version/fillpattern)](https://CRAN.R-project.org/package=fillpattern)
-[![conda](https://anaconda.org/conda-forge/r-fillpattern/badges/version.svg)](https://anaconda.org/conda-forge/r-fillpattern)
+[![cran](https://img.shields.io/cran/v/fillpattern?logo=r&label=CRAN)](https://CRAN.R-project.org/package=fillpattern)
+[![conda](https://img.shields.io/conda/v/conda-forge/r-fillpattern?logo=anaconda&label=conda)](https://anaconda.org/conda-forge/r-fillpattern)
 [![downloads](https://cranlogs.r-pkg.org/badges/grand-total/fillpattern)](https://cranlogs.r-pkg.org/)
-
 <!-- badges: end -->
 
 ## Overview
@@ -37,7 +38,9 @@ pak::pak("cmmr/fillpattern")
 
 ## Usage
 
-Simply add `scale_fill_pattern()` to your ggplot.
+Simply add
+[`scale_fill_pattern()`](https://cmmr.github.io/fillpattern/reference/scale_fill_pattern.html)
+to your ggplot.
 
 ``` r
 library(ggplot2)
@@ -71,8 +74,10 @@ grid.polygon(gp = gpar(fill = fill_pattern("brick")), x = c(6,7,5)/8, y = c(7,1,
 
 ## Basic Patterns
 
-Use any of these pattern names in `fill_pattern()` or
-`scale_fill_pattern()`.
+Use any of these pattern names in
+[`fill_pattern()`](https://cmmr.github.io/fillpattern/reference/fill_pattern.html)
+or
+[`scale_fill_pattern()`](https://cmmr.github.io/fillpattern/reference/scale_fill_pattern.html).
 
 ![](man/figures/README-unnamed-chunk-5-1.png)<!-- -->
 
@@ -80,12 +85,18 @@ Use any of these pattern names in `fill_pattern()` or
 
 For each basic pattern, you can specify the foreground color, background
 color, line width/style, tile size/rotation, and more through arguments
-to `fill_pattern()` and `scale_fill_pattern()`.
+to
+[`fill_pattern()`](https://cmmr.github.io/fillpattern/reference/fill_pattern.html)
+and
+[`scale_fill_pattern()`](https://cmmr.github.io/fillpattern/reference/scale_fill_pattern.html).
 
 Most modifications can be specified as part of the pattern name (shown
 below).
 
 ![](man/figures/README-unnamed-chunk-6-1.png)<!-- -->
 
-For additional details, see the `fill_pattern()` and
-`scale_fill_pattern()` reference pages.
+For additional details, see the
+[`fill_pattern()`](https://cmmr.github.io/fillpattern/reference/fill_pattern.html)
+and
+[`scale_fill_pattern()`](https://cmmr.github.io/fillpattern/reference/scale_fill_pattern.html)
+reference pages.
