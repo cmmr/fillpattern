@@ -34,19 +34,19 @@ jobs:
           - {os: macos-latest,     r: 'devel'}
           - {os: macos-latest,     r: 'release'}
           - {os: macos-latest,     r: 'oldrel-1'}
-          - {os: macos-latest,     r: '4.1'}
+          - {os: macos-latest,     r: '4.2'}
           - {os: macos-14,         r: 'release'}
           
           - {os: windows-latest,   r: 'devel'}
           - {os: windows-latest,   r: 'release'}
           - {os: windows-latest,   r: 'oldrel-1'}
-          - {os: windows-latest,   r: '4.1'}
+          - {os: windows-latest,   r: '4.2'}
           - {os: windows-2022,     r: 'release'}
           
           - {os: ubuntu-latest,    r: 'devel' }
           - {os: ubuntu-latest,    r: 'release'}
           - {os: ubuntu-latest,    r: 'oldrel-1'}
-          - {os: ubuntu-latest,    r: '4.1'}
+          - {os: ubuntu-latest,    r: '4.2'}
           - {os: ubuntu-22.04,     r: 'release'}
 
     env:
@@ -63,10 +63,6 @@ jobs:
           r-version: ${{ matrix.config.r }}
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
-
-      - name: Install system font deps (macOS)
-        if: runner.os == 'macOS'
-        run: brew install freetype libpng
         
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:

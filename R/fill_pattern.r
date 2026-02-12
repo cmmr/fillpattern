@@ -148,6 +148,7 @@ fill_pattern <- function (
         fun      = get_i(fun,      i),
         min_size = get_i(min_size, i) )
     
+    # group was added in R 4.2
     if ('group' %in% formalArgs(grid::pattern)) {
       grid::pattern(grob = grob, group = FALSE)
     } else {
