@@ -64,6 +64,10 @@ jobs:
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
 
+      - name: Install system font deps (macOS)
+        if: runner.os == 'macOS'
+        run: brew install freetype libpng
+        
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: any::rcmdcheck

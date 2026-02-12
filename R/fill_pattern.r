@@ -136,9 +136,7 @@ fill_pattern <- function (
   #________________________________________________________
   fills <- lapply(seq_along(patterns), function (i) {
     
-    grid::pattern(
-      group = FALSE,
-      grob  = fillPatternGrob(
+    grob <- fillPatternGrob(
         pattern  = get_i(patterns, i),
         fg       = get_i(fg,       i),
         bg       = get_i(bg,       i),
@@ -148,7 +146,14 @@ fill_pattern <- function (
         lwd      = get_i(lwd,      i),
         lty      = get_i(lty,      i),
         fun      = get_i(fun,      i),
-        min_size = get_i(min_size,   i) ))
+        min_size = get_i(min_size, i) )
+    
+    if ('group' %in% formalArgs(grid::pattern)) {
+      grid::pattern(grob = grob, group = FALSE)
+    } else {
+      grid::pattern(grob = grob)
+    }
+    
   })
   
   
