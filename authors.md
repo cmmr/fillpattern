@@ -11,7 +11,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/cmmr/fillpattern/blob/main/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/cmmr/fillpattern/blob/v1.0.3/DESCRIPTION)
 
 Smith D (2026). *fillpattern: Patterned Fills for 'ggplot2' and 'grid'
 Graphics*. R package version 1.0.3,
