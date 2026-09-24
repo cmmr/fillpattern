@@ -17,6 +17,7 @@ package, `fillpattern`:
 ## Installation
 
 ``` r
+
 # Install the latest stable version from CRAN:
 install.packages("fillpattern")
 
@@ -32,6 +33,7 @@ Simply add
 to your ggplot.
 
 ``` r
+
 library(ggplot2)
 library(fillpattern)
 
@@ -53,6 +55,7 @@ and other `geom_*` functions that accept a `fill` aesthetic.
 Set `fill = fill_pattern()` in the grob’s graphical parameters.
 
 ``` r
+
 library(grid)
 library(fillpattern)
 

@@ -2,6 +2,8 @@
 
 ## fillpattern 1.0.3
 
+CRAN release: 2026-02-13
+
 ### New Features
 
 - **Hex Logo:** Added an official hex logo to the package.
