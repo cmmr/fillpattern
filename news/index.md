@@ -1,5 +1,14 @@
 # Changelog
 
+## fillpattern 1.0.4
+
+### New Features
+
+- **Empty Pattern:** Added an `"empty"` pattern that renders only the
+  background color, for use as a baseline alongside patterned fills
+  ([@ulysg](https://github.com/ulysg),
+  [\#5](https://github.com/cmmr/fillpattern/issues/5)).
+
 ## fillpattern 1.0.3
 
 CRAN release: 2026-02-13

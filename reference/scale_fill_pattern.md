@@ -112,8 +112,7 @@ object.
 All of the parameters can accept a vector of values or a function that
 takes `n` as an argument and returns the value(s) to use. The values are
 subset or recycled as needed to obtain the same number as
-`length(levels(fill))`, where fill is the variable defined by
-`aes(fill = )`.
+`nlevels(fill)`, where fill is the variable defined by `aes(fill = )`.
 
 ## Pattern Names
 
@@ -121,7 +120,12 @@ subset or recycled as needed to obtain the same number as
 
 - Pattern names must always begin with one of `"brick"`, `"chevron"`,
   `"fish"`, `"grid"`, `"herringbone"`, `"hexagon"`, `"octagon"`,
-  `"rain"`, `"saw"`, `"shingle"`, `"rshingle"`, `"stripe"`, or `"wave"`.
+  `"rain"`, `"saw"`, `"shingle"`, `"rshingle"`, `"stripe"`, `"wave"`, or
+  `"empty"`.
+
+- `"empty"` draws no pattern lines, only the `bg` color. This is useful
+  for a baseline or control group shown next to patterned groups.
+  Modifiers are accepted but have no visible effect.
 
 - These names support partial matching, e.g. `"her"`, `"herring"`, and
   `"herringbone"` are all valid. However, tiling designs may be added in

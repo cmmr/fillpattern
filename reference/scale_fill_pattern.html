@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">fillpattern</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -136,7 +136,7 @@ with <code><a href="https://rdrr.io/r/grid/unit.html" class="external-link">unit
     <p>All of the parameters can accept a vector of values or a function
 that takes <code>n</code> as an argument and returns the value(s) to use. The
 values are subset or recycled as needed to obtain the same number
-as <code>length(levels(fill))</code>, where fill is the variable defined by
+as <code>nlevels(fill)</code>, where fill is the variable defined by
 <code>aes(fill = )</code>.</p>
     </div>
     <div class="section level2">
@@ -146,7 +146,10 @@ as <code>length(levels(fill))</code>, where fill is the variable defined by
 
 <p><strong>Base name:</strong></p><ul><li><p>Pattern names must always begin with one of <code>"brick"</code>, <code>"chevron"</code>,
 <code>"fish"</code>, <code>"grid"</code>, <code>"herringbone"</code>, <code>"hexagon"</code>, <code>"octagon"</code>, <code>"rain"</code>,
-<code>"saw"</code>, <code>"shingle"</code>, <code>"rshingle"</code>, <code>"stripe"</code>, or <code>"wave"</code>.</p></li>
+<code>"saw"</code>, <code>"shingle"</code>, <code>"rshingle"</code>, <code>"stripe"</code>, <code>"wave"</code>, or <code>"empty"</code>.</p></li>
+<li><p><code>"empty"</code> draws no pattern lines, only the <code>bg</code> color. This is useful
+for a baseline or control group shown next to patterned groups. Modifiers
+are accepted but have no visible effect.</p></li>
 <li><p>These names support partial matching, e.g. <code>"her"</code>, <code>"herring"</code>, and
 <code>"herringbone"</code> are all valid. However, tiling designs may be added in
 the future, so it is recommended to use the full names in finished code.</p></li>
