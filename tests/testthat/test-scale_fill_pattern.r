@@ -27,7 +27,14 @@ test_that("ggplot2 graphics", {
         lwd      = c(2, 3, 1) ) +
       theme(legend.key.size = unit(2, 'cm'))
   })
-  
+
+  p4 <- expect_silent({
+    ggplot(mpg, aes(x = drv, color = drv, fill = drv)) +
+      geom_bar() +
+      scale_fill_pattern(c("empty", "brick", "stripe"), bg = "white")
+  })
+  expect_silent(print(p4))
+
 })
   
   

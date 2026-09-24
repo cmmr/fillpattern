@@ -12,7 +12,8 @@ test_that("grid graphics", {
   
   linetypes <- c("solid", "dashed", "dotted", "dotdash", "longdash", "twodash")
   patterns  <- c("brick", "chevron", "fish", "grid", "herringbone", "hexagon", 
-                 "octagon", "rain", "saw", "shingle", "rshingle", "stripe", "wave" )
+                 "octagon", "rain", "saw", "shingle", "rshingle", "stripe", "wave",
+                 "empty" )
   
   n     <- 20
   fills <- expect_silent(fill_pattern(

@@ -20,10 +20,10 @@ Compared to the similar
 [`ggpattern`](https://coolbutuseless.github.io/package/ggpattern/index.html)
 package, `fillpattern`:
 
-- Has no dependencies beyond base R and
-  [`ggplot2`](https://ggplot2.tidyverse.org).
-- Works with `ggplot2::geom_*` functions.
-- Focuses on simple geometric patterns.
+-   Has no dependencies beyond base R and
+    [`ggplot2`](https://ggplot2.tidyverse.org).
+-   Works with `ggplot2::geom_*` functions.
+-   Focuses on simple geometric patterns.
 
 ## Installation
 
@@ -80,6 +80,8 @@ or
 [`scale_fill_pattern()`](https://cmmr.github.io/fillpattern/reference/scale_fill_pattern.html).
 
 ![](man/figures/README-unnamed-chunk-5-1.png)<!-- -->
+
+Use `"empty"` for a plain background with no pattern lines.
 
 ## Modified Patterns
 

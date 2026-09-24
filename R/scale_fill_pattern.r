@@ -221,9 +221,9 @@ pattern_alpha.GridFillPattern <- function (x, alpha) {
 #' 
 #' @param color   A color in a format parse-able by `grDevices::col2rgb()`.
 #' @param default   Color to use instead if `color` is `NA`.
-#' @param fade   How much to fade the color towards white. Range [0,1], where 1 
-#'        is no change.
-#' @param alpha   How much transparency to add. Range [0,1], where 1 is no 
+#' @param fade   How much to fade the color towards white. Range `[0, 1]`,
+#'        where 1 is no change.
+#' @param alpha   How much transparency to add. Range `[0, 1]`, where 1 is no
 #'        change.
 #' 
 #' @return A color.

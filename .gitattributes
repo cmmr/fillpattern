@@ -1,0 +1,9 @@
+# Normalize all text files to LF, in the repository and on checkout.
+* text=auto eol=lf
+
+# Windows batch files need CRLF.
+*.bat text eol=crlf
+
+# Binary files.
+*.png binary
+*.pdf binary

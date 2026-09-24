@@ -11,6 +11,6 @@ These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
-  \item{ggplot2}{\code{\link[ggplot2:reexports]{unit}}}
+  \item{ggplot2}{\code{\link[ggplot2:unit]{unit}}}
 }}
 

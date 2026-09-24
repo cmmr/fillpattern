@@ -1,3 +1,11 @@
+# fillpattern 1.0.4
+
+## New Features
+
+* **Empty Pattern:** Added an `"empty"` pattern that renders only the background
+  color, for use as a baseline alongside patterned fills (@ulysg, #5).
+
+
 # fillpattern 1.0.3
 
 ## New Features

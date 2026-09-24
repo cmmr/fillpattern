@@ -84,23 +84,25 @@ grid.polygon(gp = gpar(fill = fill_pattern("brick")), x = c(6,7,5)/8, y = c(7,1,
 
 Use any of these pattern names in [`fill_pattern()`](https://cmmr.github.io/fillpattern/reference/fill_pattern.html) or [`scale_fill_pattern()`](https://cmmr.github.io/fillpattern/reference/scale_fill_pattern.html).
 
-```{r, echo = FALSE}
+```{r, echo = FALSE, fig.width = 10}
 
 grid.newpage()
 
 invisible(mapply(
   p = c(
-    "brick", "chevron", "fish", "grid", "herringbone", "hexagon", 
-    "octagon", "saw", "shingle", "rshingle", "stripe", "wave" ), 
-  x = rep(1:4 / 4, times = 3) - 1/8, 
-  y = rep(3:1 / 3, each  = 4) - 1/6, 
+    "brick", "chevron", "fish", "grid", "herringbone", "hexagon", "octagon",
+    "rain", "saw", "shingle", "rshingle", "stripe", "wave", "empty" ),
+  x = head(rep(1:5 / 5, times = 3) - 1/10, 14),
+  y = head(rep(3:1 / 3, each  = 5) - 1/6,  14),
   function (p, x, y) {
     gp <- gpar(fill = fill_pattern(p))
-    grid.rect(x = x, y = y - .03, width = .2, height = .2, gp = gp)
+    grid.rect(x = x, y = y - .03, width = .16, height = .2, gp = gp)
     grid.text(x = x, y = y + .11, label = p)
 }))
-   
+
 ```
+
+Use `"empty"` for a plain background with no pattern lines.
 
 
 ## Modified Patterns

@@ -7,8 +7,9 @@
 #' @param patterns,pattern   The pattern specification. Options are `"brick"`, 
 #'        `"chevron"`, `"fish"`, `"grid"`, `"herringbone"`, `"hexagon"`, 
 #'        `"octagon"`, `"rain"`, `"saw"`, `"shingle"`, `"rshingle"`, 
-#'        `"stripe"`, and `"wave"`, optionally abbreviated and/or suffixed with 
-#'        modifiers. See "Pattern Names" section below. Default: `"brick"`
+#'        `"stripe"`, `"wave"`, and `"empty"`, optionally abbreviated and/or
+#'        suffixed with modifiers. See "Pattern Names" section below.
+#'        Default: `"brick"`
 #'
 #' @param fg   Foreground color, for the pattern's lines. Default: `"black"`
 #'
@@ -60,7 +61,10 @@
 #' **Base name:**
 #' * Pattern names must always begin with one of `"brick"`, `"chevron"`, 
 #'   `"fish"`, `"grid"`, `"herringbone"`, `"hexagon"`, `"octagon"`, `"rain"`, 
-#'   `"saw"`, `"shingle"`, `"rshingle"`, `"stripe"`, or `"wave"`.
+#'   `"saw"`, `"shingle"`, `"rshingle"`, `"stripe"`, `"wave"`, or `"empty"`.
+#' * `"empty"` draws no pattern lines, only the `bg` color. This is useful
+#'   for a baseline or control group shown next to patterned groups. Modifiers
+#'   are accepted but have no visible effect.
 #' * These names support partial matching, e.g. `"her"`, `"herring"`, and 
 #'   `"herringbone"` are all valid. However, tiling designs may be added in 
 #'   the future, so it is recommended to use the full names in finished code.

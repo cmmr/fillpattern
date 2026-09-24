@@ -77,7 +77,7 @@ Patterned Fills for ggplot.
 All of the parameters can accept a vector of values or a function
 that takes \code{n} as an argument and returns the value(s) to use. The
 values are subset or recycled as needed to obtain the same number
-as \code{length(levels(fill))}, where fill is the variable defined by
+as \code{nlevels(fill)}, where fill is the variable defined by
 \code{aes(fill = )}.
 }
 \section{Pattern Names}{
@@ -87,7 +87,10 @@ as \code{length(levels(fill))}, where fill is the variable defined by
 \itemize{
 \item Pattern names must always begin with one of \code{"brick"}, \code{"chevron"},
 \code{"fish"}, \code{"grid"}, \code{"herringbone"}, \code{"hexagon"}, \code{"octagon"}, \code{"rain"},
-\code{"saw"}, \code{"shingle"}, \code{"rshingle"}, \code{"stripe"}, or \code{"wave"}.
+\code{"saw"}, \code{"shingle"}, \code{"rshingle"}, \code{"stripe"}, \code{"wave"}, or \code{"empty"}.
+\item \code{"empty"} draws no pattern lines, only the \code{bg} color. This is useful
+for a baseline or control group shown next to patterned groups. Modifiers
+are accepted but have no visible effect.
 \item These names support partial matching, e.g. \code{"her"}, \code{"herring"}, and
 \code{"herringbone"} are all valid. However, tiling designs may be added in
 the future, so it is recommended to use the full names in finished code.

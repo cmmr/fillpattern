@@ -35,8 +35,9 @@ fillPatternGrob(
 \item{patterns, pattern}{The pattern specification. Options are \code{"brick"},
 \code{"chevron"}, \code{"fish"}, \code{"grid"}, \code{"herringbone"}, \code{"hexagon"},
 \code{"octagon"}, \code{"rain"}, \code{"saw"}, \code{"shingle"}, \code{"rshingle"},
-\code{"stripe"}, and \code{"wave"}, optionally abbreviated and/or suffixed with
-modifiers. See "Pattern Names" section below. Default: \code{"brick"}}
+\code{"stripe"}, \code{"wave"}, and \code{"empty"}, optionally abbreviated and/or
+suffixed with modifiers. See "Pattern Names" section below.
+Default: \code{"brick"}}
 
 \item{fg}{Foreground color, for the pattern's lines. Default: \code{"black"}}
 
@@ -92,7 +93,10 @@ which are subset or recycled as needed to obtain the same number as
 \itemize{
 \item Pattern names must always begin with one of \code{"brick"}, \code{"chevron"},
 \code{"fish"}, \code{"grid"}, \code{"herringbone"}, \code{"hexagon"}, \code{"octagon"}, \code{"rain"},
-\code{"saw"}, \code{"shingle"}, \code{"rshingle"}, \code{"stripe"}, or \code{"wave"}.
+\code{"saw"}, \code{"shingle"}, \code{"rshingle"}, \code{"stripe"}, \code{"wave"}, or \code{"empty"}.
+\item \code{"empty"} draws no pattern lines, only the \code{bg} color. This is useful
+for a baseline or control group shown next to patterned groups. Modifiers
+are accepted but have no visible effect.
 \item These names support partial matching, e.g. \code{"her"}, \code{"herring"}, and
 \code{"herringbone"} are all valid. However, tiling designs may be added in
 the future, so it is recommended to use the full names in finished code.
