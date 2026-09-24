@@ -52,7 +52,7 @@ pak::pak("cmmr/fillpattern")
 
 Simply add [`scale_fill_pattern()`](https://cmmr.github.io/fillpattern/reference/scale_fill_pattern.html) to your ggplot.
 
-```{r}
+```{r, fig.width = 10}
 library(ggplot2)
 library(fillpattern)
 
