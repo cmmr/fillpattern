@@ -175,8 +175,8 @@ makeContent.fill_pattern <- function (x) {
       #________________________________________________________
       pattern <- local({
         choices <- c(
-          "brick", "chevron", "fish", "grid", "herringbone", "hexagon", 
-          "octagon", "rain", "saw", "shingle", "rshingle", "stripe", "wave" )
+          "brick", "chevron", "fish", "grid", "herringbone", "hexagon", "octagon",
+          "rain", "saw", "shingle", "rshingle", "stripe", "wave", "empty" )
         tryCatch(
           expr  = match.arg(arg = pattern, choices = choices),
           error = function (e) {
@@ -267,13 +267,14 @@ makeContent.fill_pattern <- function (x) {
         # rowSums(expand.grid(...))
       }
       
-      
       #________________________________________________________
       # Draw the pattern over the entire area.
       #________________________________________________________
       res <- switch(
         EXPR = pattern,
-        
+
+        empty = list(as.null, list()),
+
         brick = list(grid::segmentsGrob, list(
           x0 = with(X, c(rep(l, m), rep(o, m),    rep(e, m))),
           y0 = with(Y, c(p, rep(o, each = m),     rep(e, each = m))),
