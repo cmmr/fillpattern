@@ -76,8 +76,6 @@ or
 
 ![](reference/figures/README-unnamed-chunk-5-1.png)
 
-Use `"empty"` for a plain background with no pattern lines.
-
 ## Modified Patterns
 
 For each basic pattern, you can specify the foreground color, background
