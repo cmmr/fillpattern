@@ -2,6 +2,8 @@
 
 ## fillpattern 1.0.4
 
+CRAN release: 2026-09-25
+
 ### New Features
 
 - **Empty Pattern:** Added an `"empty"` pattern that renders only the
