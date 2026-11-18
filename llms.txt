@@ -35,6 +35,7 @@ to your ggplot.
 ``` r
 
 library(ggplot2)
+#> Warning: package 'ggplot2' was built under R version 4.6.2
 library(fillpattern)
 
 ggplot(mpg, aes(x = class, color = drv, fill = drv)) +
