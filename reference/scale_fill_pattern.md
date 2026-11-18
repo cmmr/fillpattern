@@ -17,7 +17,9 @@ scale_fill_pattern(
   lwd = 1,
   lty = "solid",
   fun = NULL,
-  min_size = 2
+  min_size = 2,
+  aesthetics = "fill",
+  ...
 )
 ```
 
@@ -101,6 +103,19 @@ scale_fill_pattern(
   elements. Assumed to be millimeters unless set otherwise with
   [`unit()`](https://rdrr.io/r/grid/unit.html). Default: `2`
 
+- aesthetics:
+
+  The names of the aesthetics that this scale works with, for instance
+  `"pattern_fill"` for geoms from the ggpattern package. Default:
+  `"fill"`
+
+- ...:
+
+  Other arguments passed on to
+  [`ggplot2::discrete_scale()`](https://ggplot2.tidyverse.org/reference/discrete_scale.html),
+  such as `name`, `breaks`, `labels`, `limits`, `na.value`, `drop`, or
+  `guide`.
+
 ## Value
 
 A
@@ -113,6 +128,19 @@ All of the parameters can accept a vector of values or a function that
 takes `n` as an argument and returns the value(s) to use. The values are
 subset or recycled as needed to obtain the same number as
 `nlevels(fill)`, where fill is the variable defined by `aes(fill = )`.
+
+## Color Mapping
+
+When `fg` or `bg` is `NA`, the pattern takes its color from the `colour`
+aesthetic of the same data row. Geoms that apply `alpha` to their fill
+with
+[`ggplot2::fill_alpha()`](https://ggplot2.tidyverse.org/reference/fill_alpha.html)
+(all of ggplot2's own geoms, and many extensions) let
+`scale_fill_pattern()` look up that row directly. For other geoms, the
+pattern uses the outline color (`col`) that the geom gives the filled
+shape, if there is exactly one; otherwise it uses black lines on a white
+background. For example, `ggalluvial::geom_alluvium()` only gives its
+flows an outline color with `outline.type = "full"`.
 
 ## Pattern Names
 

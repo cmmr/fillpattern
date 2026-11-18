@@ -1,5 +1,38 @@
 # Changelog
 
+## fillpattern 1.0.5
+
+### New Features
+
+- **Other Aesthetics and Scale Options:**
+  [`scale_fill_pattern()`](https://cmmr.github.io/fillpattern/reference/scale_fill_pattern.md)
+  gains `aesthetics` and `...` arguments. Use
+  `aesthetics = "pattern_fill"` for ‘ggpattern’ geoms, and pass `name`,
+  `labels`, `breaks`, `limits`, `guide`, etc. through to
+  [`ggplot2::discrete_scale()`](https://ggplot2.tidyverse.org/reference/discrete_scale.html)
+  ([\#8](https://github.com/cmmr/fillpattern/issues/8)).
+- **Inherited Colors:** `fill_pattern(fg = NA)` and
+  `fill_pattern(bg = NA)` now take their color from the outline (`col`)
+  of the shape being filled.
+
+### Bug Fixes
+
+- **Extension Geoms:**
+  [`scale_fill_pattern()`](https://cmmr.github.io/fillpattern/reference/scale_fill_pattern.md)
+  no longer errors in geoms that don’t call
+  [`ggplot2::fill_alpha()`](https://ggplot2.tidyverse.org/reference/fill_alpha.html),
+  such as `ggalluvial::geom_alluvium()`. The scale’s palette now returns
+  real [`grid::pattern()`](https://rdrr.io/r/grid/patterns.html)
+  objects. In those geoms, `NA` colors come from the shape’s outline
+  color, or fall back to black lines on white
+  ([\#7](https://github.com/cmmr/fillpattern/issues/7)).
+- **Color Lookup:** The `colour` aesthetic lookup no longer depends on a
+  fixed call-stack depth. It now finds the data in the frame that called
+  [`ggplot2::fill_alpha()`](https://ggplot2.tidyverse.org/reference/fill_alpha.html).
+- **Transparent Colors:** A fully transparent `colour` (e.g. 
+  ‘ggalluvial’’s default) is now treated as missing, so patterns stay
+  visible.
+
 ## fillpattern 1.0.4
 
 CRAN release: 2026-09-25
