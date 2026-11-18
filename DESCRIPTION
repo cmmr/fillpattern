@@ -1,7 +1,7 @@
 Package: fillpattern
 Type: Package
 Title: Patterned Fills for 'ggplot2' and 'grid' Graphics
-Version: 1.0.4.9000
+Version: 1.0.5
 Authors@R: c(
     person(
       "Daniel P.", "Smith",
@@ -34,8 +34,6 @@ Imports:
     methods,
     utils
 Suggests:
-    ggalluvial,
-    ggpattern,
     ragg,
     testthat (>= 3.0.0)
 Config/roxygen2/version: 8.0.0

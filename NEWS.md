@@ -1,4 +1,4 @@
-# fillpattern (development version)
+# fillpattern 1.0.5
 
 ## New Features
 

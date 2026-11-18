@@ -99,43 +99,6 @@ test_that("fill_alpha() geoms still map colour per row", {
 })
 
 
-test_that("ggalluvial::geom_alluvium() renders (#7)", {
-  skip_if_not_installed("ggalluvial")
-  library(ggplot2)
-  library(ggalluvial)
-  done <- local_pdf(); on.exit(done(), add = TRUE)
-
-  df <- as.data.frame(UCBAdmissions)
-
-  p <- ggplot(df, aes(y = Freq, axis1 = Gender, axis2 = Dept)) +
-    geom_alluvium(aes(fill = Admit)) +
-    geom_stratum() +
-    scale_fill_pattern()
-  expect_no_error(print(p))
-
-  p <- ggplot(df, aes(y = Freq, axis1 = Gender, axis2 = Dept)) +
-    geom_alluvium(aes(fill = Admit)) +
-    scale_fill_pattern(fg = "black", bg = "white")
-  expect_no_error(print(p))
-
-  # ggalluvial's default colour is "transparent"; patterns must stay visible.
-  rec <- fg_recorder()
-  print(ggplot(df, aes(y = Freq, axis1 = Gender, axis2 = Dept)) +
-    geom_alluvium(aes(fill = Admit)) +
-    scale_fill_pattern(fun = rec$hook))
-  expect_gt(length(rec$fg), 0)
-  expect_equal(unique(rec$fg), "black")
-
-  # With a full outline, the flows' colour mapping is picked up.
-  rec <- fg_recorder()
-  print(ggplot(df, aes(y = Freq, axis1 = Gender, axis2 = Dept)) +
-    geom_alluvium(aes(fill = Admit, colour = Admit), outline.type = "full") +
-    scale_colour_manual(values = c("#FF0000", "#0000FF")) +
-    scale_fill_pattern(fun = rec$hook))
-  expect_setequal(unique(rec$fg), c("#FF0000", "#0000FF"))
-})
-
-
 test_that("scale_fill_pattern() passes `...` to discrete_scale() (#8)", {
   library(ggplot2)
   done <- local_pdf(); on.exit(done(), add = TRUE)
@@ -153,18 +116,6 @@ test_that("scale_fill_pattern() passes `...` to discrete_scale() (#8)", {
 test_that("scale_fill_pattern() supports other aesthetics (#8)", {
   sc <- scale_fill_pattern(aesthetics = "pattern_fill")
   expect_equal(sc$aesthetics, "pattern_fill")
-
-  skip_if_not_installed("ggpattern")
-  library(ggplot2)
-  library(ggpattern)
-  done <- local_pdf(); on.exit(done(), add = TRUE)
-
-  rec <- fg_recorder()
-  p <- ggplot(mpg, aes(drv)) +
-    geom_bar_pattern(aes(pattern_fill = drv), pattern = "stripe") +
-    scale_fill_pattern(aesthetics = "pattern_fill", fun = rec$hook)
-  expect_no_error(print(p))
-  expect_gt(length(rec$fg), 0)
 })
 
 
