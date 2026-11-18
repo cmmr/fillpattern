@@ -2,5 +2,6 @@
 .Rproj.user/
 conda/
 cran-comments.md
+CRAN-SUBMISSION
 fillpattern.Rproj
 rhub_check.r
