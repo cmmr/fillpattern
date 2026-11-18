@@ -19,17 +19,17 @@ test_that("scale_fill_pattern: internal get_i recycling logic", {
   expect_length(res, 3)
   
   # Check item 1
-  expect_equal(res[[1]]$patterns, "p1")
-  expect_equal(res[[1]]$fg, "red")
-  expect_equal(res[[1]]$width, 10)
+  expect_equal(attr(res[[1]], "fillpattern_args")$patterns, "p1")
+  expect_equal(attr(res[[1]], "fillpattern_args")$fg, "red")
+  expect_equal(attr(res[[1]], "fillpattern_args")$width, 10)
   
   # Check item 2
-  expect_equal(res[[2]]$patterns, "p2")
-  expect_equal(res[[2]]$fg, "blue")
+  expect_equal(attr(res[[2]], "fillpattern_args")$patterns, "p2")
+  expect_equal(attr(res[[2]], "fillpattern_args")$fg, "blue")
   
   # Check item 3 (Recycled)
-  expect_equal(res[[3]]$patterns, "p1")
-  expect_equal(res[[3]]$fg, "red")
+  expect_equal(attr(res[[3]], "fillpattern_args")$patterns, "p1")
+  expect_equal(attr(res[[3]], "fillpattern_args")$fg, "red")
 })
 
 test_that("scale_fill_pattern: internal fill_palette name preservation", {
@@ -56,8 +56,8 @@ test_that("scale_fill_pattern: functional parameters evaluation", {
   pal <- sc$palette
   res <- pal(2)
   
-  expect_equal(res[[1]]$fg, "color1")
-  expect_equal(res[[2]]$fg, "color2")
+  expect_equal(attr(res[[1]], "fillpattern_args")$fg, "color1")
+  expect_equal(attr(res[[2]], "fillpattern_args")$fg, "color2")
 })
 
 test_that("scale_fill_pattern: distinguishes 'fun' hook from param functions", {
@@ -66,14 +66,14 @@ test_that("scale_fill_pattern: distinguishes 'fun' hook from param functions", {
   sc <- scale_fill_pattern(fun = hook_fun)
   pal <- sc$palette
   res <- pal(1)
-  expect_identical(res[[1]]$fun, hook_fun)
+  expect_identical(attr(res[[1]], "fillpattern_args")$fun, hook_fun)
   
   # 2. If a param function (like lwd) does NOT have (env, row), it is evaluated
   gen_fun <- function(n) rep(5, n)
   sc <- scale_fill_pattern(lwd = gen_fun)
   pal <- sc$palette
   res <- pal(2)
-  expect_equal(res[[1]]$lwd, 5)
+  expect_equal(attr(res[[1]], "fillpattern_args")$lwd, 5)
 })
 
 test_that("pattern_alpha: extracts aes context and passes to fun", {

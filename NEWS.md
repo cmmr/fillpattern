@@ -1,3 +1,28 @@
+# fillpattern (development version)
+
+## New Features
+
+* **Other Aesthetics and Scale Options:** `scale_fill_pattern()` gains 
+  `aesthetics` and `...` arguments. Use `aesthetics = "pattern_fill"` for 
+  'ggpattern' geoms, and pass `name`, `labels`, `breaks`, `limits`, `guide`, 
+  etc. through to `ggplot2::discrete_scale()` (#8).
+* **Inherited Colors:** `fill_pattern(fg = NA)` and `fill_pattern(bg = NA)` now 
+  take their color from the outline (`col`) of the shape being filled.
+
+## Bug Fixes
+
+* **Extension Geoms:** `scale_fill_pattern()` no longer errors in geoms that 
+  don't call `ggplot2::fill_alpha()`, such as `ggalluvial::geom_alluvium()`. 
+  The scale's palette now returns real `grid::pattern()` objects. In those 
+  geoms, `NA` colors come from the shape's outline color, or fall back to 
+  black lines on white (#7).
+* **Color Lookup:** The `colour` aesthetic lookup no longer depends on a fixed 
+  call-stack depth. It now finds the data in the frame that called 
+  `ggplot2::fill_alpha()`.
+* **Transparent Colors:** A fully transparent `colour` (e.g. 
+  'ggalluvial''s default) is now treated as missing, so patterns stay visible.
+
+
 # fillpattern 1.0.4
 
 ## New Features

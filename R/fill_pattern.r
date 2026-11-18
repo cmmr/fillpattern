@@ -11,9 +11,11 @@
 #'        suffixed with modifiers. See "Pattern Names" section below.
 #'        Default: `"brick"`
 #'
-#' @param fg   Foreground color, for the pattern's lines. Default: `"black"`
+#' @param fg   Foreground color, for the pattern's lines, or `NA` to use the
+#'        outline color (`col`) of the shape being filled. Default: `"black"`
 #'
-#' @param bg   Background color (or grob). Default: `"transparent"`
+#' @param bg   Background color (or grob), or `NA` to use the outline color 
+#'        (`col`) of the shape being filled. Default: `"transparent"`
 #'
 #' @param angle   How much the rotate the pattern, given in degrees clockwise.
 #'        Default: `0`
@@ -50,6 +52,12 @@
 #'          `fill_pattern()` can accept a vector of values for each parameter 
 #'          which are subset or recycled as needed to obtain the same number as 
 #'          `length(patterns)`.
+#' 
+#' When `fg` or `bg` is `NA`, the color is looked up when the pattern is 
+#' drawn: it is the `col` of the shape the pattern fills, or `"black"` (for 
+#' `fg`) / `"white"` (for `bg`) if that shape has no single, visible `col`. A 
+#' grob that draws several shapes, such as `rectGrob(x = 1:3/4, ...)`, only 
+#' qualifies if all of them have the same `col`.
 #' 
 #' 
 #' @return `fill_pattern()` returns a list of `grid::pattern()` objects; 
@@ -116,6 +124,12 @@
 #'     grid.polygon(gp = gp[[2]], x = c(9,12,15)/16, y = c(15,9,15)/16)
 #'     grid.rect(   gp = gp[[3]], x = 1/4, y = 1/4, width = 2/5, height = 2/5)
 #'     grid.rect(   gp = gp[[4]], x = 3/4, y = 1/4, width = 2/5, height = 2/5)
+#'     
+#'     # fg = NA picks up the outline color of each shape.
+#'     grid.newpage()
+#'     fill <- fill_pattern("stripe45", fg = NA)
+#'     grid.circle(x = 1/4, r = 1/5, gp = gpar(col = "red",  fill = fill))
+#'     grid.circle(x = 3/4, r = 1/5, gp = gpar(col = "blue", fill = fill))
 
 fill_pattern <- function (
     patterns = "brick", fg = "black", bg = "transparent",

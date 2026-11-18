@@ -195,6 +195,23 @@ makeContent.fill_pattern <- function (x) {
       
       
       #________________________________________________________
+      # NA colours: inherit from the filled shape's outline.
+      #________________________________________________________
+      if (is_na(fg) || is_na(bg)) {
+        
+        # Only meaningful when all the grob's shapes share one colour.
+        col <- unique(grid::get.gpar('col')$col)
+        if (length(col) != 1) col <- NA
+        
+        fade  <- gt$fade  %||% 1
+        alpha <- gt$alpha %||% 1
+        if (is_na(fg)) fg <- lighten(col, "black", fade, alpha)
+        if (is_na(bg)) bg <- lighten(col, "white", fade, alpha)
+        remove("col", "fade", "alpha")
+      }
+      
+      
+      #________________________________________________________
       # Allow the user to make custom modifications.
       #________________________________________________________
       vp <- if (angle %% 360) grid::viewport(angle = -angle)

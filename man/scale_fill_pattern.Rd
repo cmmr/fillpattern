@@ -16,7 +16,9 @@ scale_fill_pattern(
   lwd = 1,
   lty = "solid",
   fun = NULL,
-  min_size = 2
+  min_size = 2,
+  aesthetics = "fill",
+  ...
 )
 }
 \arguments{
@@ -66,6 +68,14 @@ error to force returning from the parent function immediately, or
 and height. Useful for avoiding CPU and memory overhead on tiny
 graphical elements. Assumed to be millimeters unless set otherwise
 with \code{\link[=unit]{unit()}}. Default: \code{2}}
+
+\item{aesthetics}{The names of the aesthetics that this scale works with,
+for instance \code{"pattern_fill"} for geoms from the \pkg{ggpattern}
+package. Default: \code{"fill"}}
+
+\item{...}{Other arguments passed on to \code{\link[ggplot2:discrete_scale]{ggplot2::discrete_scale()}}, such
+as \code{name}, \code{breaks}, \code{labels}, \code{limits}, \code{na.value}, \code{drop}, or
+\code{guide}.}
 }
 \value{
 A \code{\link[ggplot2:discrete_scale]{ggplot2::discrete_scale()}} object.
@@ -80,6 +90,19 @@ values are subset or recycled as needed to obtain the same number
 as \code{nlevels(fill)}, where fill is the variable defined by
 \code{aes(fill = )}.
 }
+\section{Color Mapping}{
+
+
+When \code{fg} or \code{bg} is \code{NA}, the pattern takes its color from the \code{colour}
+aesthetic of the same data row. Geoms that apply \code{alpha} to their fill with
+\code{\link[ggplot2:fill_alpha]{ggplot2::fill_alpha()}} (all of ggplot2's own geoms, and many extensions)
+let \code{scale_fill_pattern()} look up that row directly. For other geoms, the
+pattern uses the outline color (\code{col}) that the geom gives the filled
+shape, if there is exactly one; otherwise it uses black lines on a white
+background. For example, \code{ggalluvial::geom_alluvium()} only gives its
+flows an outline color with \code{outline.type = "full"}.
+}
+
 \section{Pattern Names}{
 
 

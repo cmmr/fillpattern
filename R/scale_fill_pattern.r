@@ -25,6 +25,14 @@
 #' @param width   The width of the pattern tile. Assumed to be millimeters 
 #'        unless set otherwise with [unit()]. Default: `unit(1/10, 'npc')`
 #' 
+#' @param aesthetics   The names of the aesthetics that this scale works with,
+#'        for instance `"pattern_fill"` for geoms from the \pkg{ggpattern} 
+#'        package. Default: `"fill"`
+#' 
+#' @param ...   Other arguments passed on to [ggplot2::discrete_scale()], such
+#'        as `name`, `breaks`, `labels`, `limits`, `na.value`, `drop`, or 
+#'        `guide`.
+#' 
 #' 
 #' @return A [ggplot2::discrete_scale()] object.
 #' 
@@ -34,6 +42,17 @@
 #'          values are subset or recycled as needed to obtain the same number 
 #'          as `nlevels(fill)`, where fill is the variable defined by 
 #'          `aes(fill = )`.
+#' 
+#' @section Color Mapping:
+#' 
+#' When `fg` or `bg` is `NA`, the pattern takes its color from the `colour` 
+#' aesthetic of the same data row. Geoms that apply `alpha` to their fill with
+#' [ggplot2::fill_alpha()] (all of ggplot2's own geoms, and many extensions) 
+#' let `scale_fill_pattern()` look up that row directly. For other geoms, the 
+#' pattern uses the outline color (`col`) that the geom gives the filled 
+#' shape, if there is exactly one; otherwise it uses black lines on a white 
+#' background. For example, `ggalluvial::geom_alluvium()` only gives its 
+#' flows an outline color with `outline.type = "full"`.
 #' 
 #' 
 #' @seealso [fill_pattern()] for base `grid` graphics integration.
@@ -74,7 +93,9 @@ scale_fill_pattern <- function (
     lwd      = 1, 
     lty      = "solid",
     fun      = NULL,
-    min_size = 2 ) {
+    min_size = 2,
+    aesthetics = "fill",
+    ... ) {
   
   
   #________________________________________________________
@@ -91,19 +112,19 @@ scale_fill_pattern <- function (
     #________________________________________________________
     # Call any functions passed to parameters
     #________________________________________________________
-    for (i in formalArgs(scale_fill_pattern))
+    for (i in setdiff(formalArgs(scale_fill_pattern), c('aesthetics', '...')))
       if (is.function(v <- get(i)))
         if (!identical(formalArgs(v), c('env', 'row')))
           assign(i, v(n))
     
     
     #________________________________________________________
-    # Sets of fill_pattern() arguments for pattern_alpha.
+    # Real grid patterns that remember their fill_pattern() 
+    # arguments, so pattern_alpha() can apply the colour 
+    # mapping later.
     #________________________________________________________
     fills <- lapply(seq_len(n), function (i) {
-      structure(
-        class = c('GridFillPattern', 'GridPattern'),
-        .Data = list(
+      new_fill_pattern(list(
           patterns = get_i(patterns, i), 
           fg       = get_i(fg,       i), 
           bg       = get_i(bg,       i), 
@@ -129,9 +150,31 @@ scale_fill_pattern <- function (
   }
   
   
-  ggplot2::discrete_scale(aesthetics = "fill",  palette = fill_palette)
+  ggplot2::discrete_scale(aesthetics = aesthetics, palette = fill_palette, ...)
 }
 
+
+
+
+#' A grid pattern that remembers its `scale_fill_pattern()` arguments.
+#'
+#' @noRd
+#' @keywords internal
+#' 
+#' @param args   A list of arguments for `fill_pattern()`, plus `fade` and 
+#'        `alpha`. `fg` and/or `bg` may be `NA`.
+#' 
+#' @return A [grid::pattern()] object with class `"GridFillPattern"` 
+#'         prepended and `args` stored in the `"fillpattern_args"` attribute.
+#'         Drawn as-is, any `NA` colours are taken from the filled shape's 
+#'         `col` (see `makeContent.fill_pattern()`).
+
+new_fill_pattern <- function (args) {
+  pat <- build_pattern(args)
+  attr(pat, 'fillpattern_args') <- args
+  class(pat) <- c('GridFillPattern', class(pat))
+  return (pat)
+}
 
 
 
@@ -140,10 +183,12 @@ scale_fill_pattern <- function (
 #' @noRd
 #' @keywords internal
 #' 
-#' @param x       A list of arguments for `fill_pattern()`.
+#' @param x       A pattern from `new_fill_pattern()`. A plain list of 
+#'                `fill_pattern()` arguments with class `"GridFillPattern"` is 
+#'                also accepted.
 #' @param alpha   The alpha mask that `ggbuild` wants applied, not used.
 #' 
-#' @return A list of one [grid::pattern()] object.
+#' @return A [grid::pattern()] object.
 #' 
 #' @export
 #' @examples
@@ -164,52 +209,95 @@ scale_fill_pattern <- function (
 
 pattern_alpha.GridFillPattern <- function (x, alpha) {
   
-  row <- list(colour = NA)
+  args <- attr(x, 'fillpattern_args', exact = TRUE)
+  if (is.null(args)) args <- unclass(x)
   
-  # Skip if we're somehow not in a ggplot_gtable() call stack.
-  if (length(sys.frames()) >= 5) {
-    
-    # Find all the aes() mappings for all grobs.
-    p   <- parent.frame(n = 5)
-    dat <- if (exists('coords',     p)) { get('coords',     p)
-    } else if (exists('first_rows', p)) { get('first_rows', p) # nocov
-    } else if (exists('data',       p)) { get('data',       p) }
-    
-    if (is.data.frame(dat)) {
-      
-      # Find our Map()/mapply() index.
-      i <- try(match.call()$x[[3]], silent = TRUE)
-      if (!is.integer(i)) i <- 1L # nocov
-      
-      # This grob's aes() mappings.
-      if (nrow(dat) >= i) row <- as.list(dat[i,])
-      
-    }
-  }
+  # ggplot2 calls Map(pattern_alpha, x = fill, alpha = alpha), so our call 
+  # looks like `FUN(x = dots[[1L]][[i]], ...)`. Recover `i`.
+  i <- tryCatch(match.call()$x[[3]], error = function (e) NULL)
+  if (!is.numeric(i) || length(i) != 1) i <- 1L
   
+  row <- aes_row(i)
   
   # Skip zero-width or zero-height grobs.
   if (all(c('xmin', 'xmax', 'ymin', 'ymax') %in% names(row)))
-    if (row$xmin == row$xmax || row$ymin == row$ymax)
+    if (isTRUE(row$xmin == row$xmax || row$ymin == row$ymax))
       return (grid::pattern(grid::rectGrob()))
   
-  
   # Apply lightened color mapping to fg/bg if they are NA.
-  if (is.na(x$fg)) x$fg <- lighten(row$colour, "black", x$fade, x$alpha)
-  if (is.na(x$bg)) x$bg <- lighten(row$colour, "white", x$fade, x$alpha)
-  
-  
-  # Make key glyphs visible for scale_fill_pattern(fg = "white").
-  if (all(c(x$fg, x$bg) %in% c("white", "#FFFFFF", "#FFFFFFFF")))
-    x$fg <- "black"
-  
+  if (!is.null(row$colour)) {
+    if (is_na(args$fg)) args$fg <- lighten(row$colour, "black", args$fade, args$alpha)
+    if (is_na(args$bg)) args$bg <- lighten(row$colour, "white", args$fade, args$alpha)
+  }
   
   # Enable user-provided function to access the aes mappings too.
-  if (is.function(x$fun)) attr(x$fun, 'row') <- row
+  if (is.function(args$fun)) attr(args$fun, 'row') <- row
   
+  build_pattern(args)
+}
+
+
+
+#' Find the layer data for the i-th grob in the current fill_alpha() call.
+#' 
+#' @noRd
+#' @keywords internal
+#' 
+#' @param i   Row index.
+#' 
+#' @return A list with the aesthetics for row `i`. If the data can't be 
+#'         found, `list()`.
+#' 
+#' @details Geoms call `ggplot2::fill_alpha()` from their `draw_panel()`, 
+#'          `draw_group()`, or `draw_key()` method, where the layer data is 
+#'          named `coords`, `first_rows`, or `data`. Search the call stack 
+#'          for the innermost `fill_alpha()` call, then look in the frame it 
+#'          was called from.
+
+aes_row <- function (i) {
   
-  # Now that we have the colors, build the grob.
-  do.call(fill_pattern, x[intersect(names(x), formalArgs(fill_pattern))])[[1]]
+  for (k in rev(seq_len(sys.nframe() - 1L))) {
+    
+    if (!identical(sys.function(k), ggplot2::fill_alpha)) next
+    
+    env <- sys.frame(sys.parents()[[k]])
+    for (nm in c('coords', 'first_rows', 'data')) {
+      dat <- get0(nm, envir = env, inherits = FALSE)
+      if (is.data.frame(dat))
+        return (if (nrow(dat) >= i) as.list(dat[i,]) else list())
+    }
+    
+    break
+  }
+  
+  return (list())
+}
+
+
+
+#' Convert one set of scale arguments into a grid pattern.
+#' 
+#' @noRd
+#' @keywords internal
+#' 
+#' @param args   A list of arguments for `fill_pattern()`, plus `fade` and 
+#'        `alpha`.
+#' 
+#' @return A [grid::pattern()] object.
+
+build_pattern <- function (args) {
+  
+  # Make key glyphs visible for scale_fill_pattern(fg = "white").
+  if (all(c(args$fg, args$bg) %in% c("white", "#FFFFFF", "#FFFFFFFF")))
+    args$fg <- "black"
+  
+  names(args)[names(args) == 'patterns'] <- 'pattern'
+  
+  grob <- do.call(fillPatternGrob, args[intersect(names(args), formalArgs(fillPatternGrob))])
+  grob$fade  <- args$fade  %||% 1
+  grob$alpha <- args$alpha %||% 1
+  
+  grid::pattern(group = FALSE, grob = grob)
 }
 
 
@@ -220,7 +308,8 @@ pattern_alpha.GridFillPattern <- function (x, alpha) {
 #' @keywords internal
 #' 
 #' @param color   A color in a format parse-able by `grDevices::col2rgb()`.
-#' @param default   Color to use instead if `color` is `NA`.
+#' @param default   Color to use instead if `color` is `NA`, `NULL`, or fully 
+#'        transparent (e.g. ggalluvial's default of `colour = "transparent"`).
 #' @param fade   How much to fade the color towards white. Range `[0, 1]`,
 #'        where 1 is no change.
 #' @param alpha   How much transparency to add. Range `[0, 1]`, where 1 is no
@@ -237,7 +326,8 @@ pattern_alpha.GridFillPattern <- function (x, alpha) {
 
 lighten <- function (color, default, fade, alpha) {
   
-  if (is.na(color)) color <- default
+  if (is_na(color) || isTRUE(grDevices::col2rgb(color, TRUE)[4,1] == 0))
+    color <- default
   
   for (i in c('fade', 'alpha')) {
     v <- get(i)
@@ -257,3 +347,16 @@ lighten <- function (color, default, fade, alpha) {
   return (color)
 }
 
+
+
+
+#' Is `x` a single NA (and not, e.g., a grob)?
+#' @noRd
+is_na <- function (x) {
+  is.null(x) || (is.atomic(x) && length(x) == 1 && is.na(x))
+}
+
+
+#' Null-default operator (base R only has this since 4.4.0).
+#' @noRd
+`%||%` <- function (x, y) if (is.null(x)) y else x
