@@ -5,8 +5,10 @@ test_that("fill_pattern handle empty and named inputs", {
 })
 
 test_that("fillPatternGrob validates arguments", {
-  expect_error(fillPatternGrob(lwd = 1:2), "should be one value")
-  expect_error(fillPatternGrob(lty = c("solid", "dashed")), "should be one value")
+  expect_warning(g <- fillPatternGrob(lwd = 1:2), "should be one value")
+  expect_equal(g$lwd, 1)
+  expect_warning(g <- fillPatternGrob(lty = c("solid", "dashed")), "should be one value")
+  expect_equal(g$lty, "solid")
   g <- fillPatternGrob(min_size = 5)
   expect_true(grid::is.unit(g$min_size))
 })
@@ -34,16 +36,17 @@ test_that("makeContent parsing logic and edge cases", {
   expect_equal(fg_gp$lwd, 2)
   expect_equal(fg_gp$lty, "dashed")
   
-  # 5. Error Handling: Invalid pattern name (Fall back to solid rect)
-  g <- fillPatternGrob(pattern = "notapattern")
+  # 5. Invalid pattern name: replaced with "brick" when created, with a warning
+  expect_warning(g <- fillPatternGrob(pattern = "notapattern", bg = "white"), "isn't a pattern name")
+  expect_equal(g$pattern, "brick")
   g_made <- grid::makeContent(g)
-  expect_length(g_made$children, 1)
-  expect_s3_class(g_made$children[[1]], "rect")
+  expect_length(g_made$children, 2)
   
-  # 6. Error Handling: Invalid lty (Fall back to solid rect)
-  g <- fillPatternGrob(lty = "notalty")
+  # 6. Invalid lty: replaced with "solid" when created, with a warning
+  expect_warning(g <- fillPatternGrob(lty = "notalty", bg = "white"), "is invalid")
+  expect_equal(g$lty, "solid")
   g_made <- grid::makeContent(g)
-  expect_length(g_made$children, 1)
+  expect_length(g_made$children, 2)
   
   # 7. Error Handling: Insufficient size
   # The function catches the "stop" and returns a fallback rectGrob.
@@ -53,7 +56,7 @@ test_that("makeContent parsing logic and edge cases", {
   on.exit(grid::popViewport())
   
   g <- fillPatternGrob(min_size = 20)
-  g_made <- grid::makeContent(g)
+  g_made <- expect_no_warning(grid::makeContent(g))
   
   # Expect fallback behavior (1 child = the background/solid rect), not a crash
   expect_length(g_made$children, 1) 
@@ -161,7 +164,7 @@ test_that("makeContent: empty size modifier strings", {
 })
 
 test_that("makeContent: insufficient height triggers fallback", {
-  # Covers: if (h < min_size || h == 0) stop('Insufficent height: ', h, ' mm')
+  # Covers: shapes shorter than min_size get a solid fill, without a warning.
   
   # We need a viewport with adequate width but inadequate height
   grid::grid.newpage()
@@ -170,7 +173,7 @@ test_that("makeContent: insufficient height triggers fallback", {
   
   # min_size = 20mm. Height (10mm) < min_size.
   g <- fillPatternGrob(min_size = 20)
-  g_made <- grid::makeContent(g)
+  g_made <- expect_no_warning(grid::makeContent(g))
   
   # Should fallback to a single rectGrob child (graceful failure)
   expect_length(g_made$children, 1)

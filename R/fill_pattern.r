@@ -33,8 +33,10 @@
 #'        See [graphics::par()] for additional details. Default: `1`
 #'
 #' @param lty   Line type. One of `"solid"`, `"dashed"`, `"dotted"`, 
-#'        `"dotdash"`, `"longdash"`, or `"twodash"`.
-#'        See [graphics::par()] for additional details. Default: `"solid"`
+#'        `"dotdash"`, `"longdash"`, `"twodash"`, or `"blank"`; an integer 
+#'        from 0 to 6; or a string of 2, 4, 6, or 8 hex digits, such as 
+#'        `"44"` or `"1342"`. See [graphics::par()] for additional details. 
+#'        Default: `"solid"`
 #'
 #' @param fun   A function for modifying graphical parameters immediately 
 #'        before rendering. Should accept two parameters: `env`, an 
@@ -46,14 +48,22 @@
 #' 
 #' @param min_size   Minimum size of the pattern to draw. Applies to both width 
 #'        and height. Useful for avoiding CPU and memory overhead on tiny 
-#'        graphical elements. Assumed to be millimeters unless set otherwise 
-#'        with [unit()]. Default: `2`
+#'        graphical elements. Shapes narrower or shorter than `min_size` are 
+#'        filled with solid `fg` color instead. Assumed to be millimeters 
+#'        unless set otherwise with [unit()]. Default: `2`
 #' 
 #' 
-#' @details `fillPatternGrob()` expects a single value for each parameter. 
-#'          `fill_pattern()` can accept a vector of values for each parameter 
-#'          which are subset or recycled as needed to obtain the same number as 
-#'          `length(patterns)`.
+#' @details `fillPatternGrob()` expects a single value for each parameter, 
+#'          and uses the first if given more. `fill_pattern()` can accept a 
+#'          vector of values for each parameter which are subset or recycled 
+#'          as needed to obtain the same number as `length(patterns)`.
+#' 
+#' Invalid values give a warning when the pattern is created, and are 
+#' replaced with the default for that parameter. For an invalid pattern 
+#' name, only the invalid parts are replaced or dropped: `"stripes45_lg"` 
+#' becomes `"brick45_lg"`, and `"fish_huge"` becomes `"fish"`. If a pattern 
+#' still can't be drawn, it is filled with solid `fg` color instead, with a 
+#' warning that is shown once per session.
 #' 
 #' When `fg` or `bg` is `NA`, the color is looked up when the pattern is 
 #' drawn: it is the `col` of the shape the pattern fills, or `"black"` (for 
@@ -143,6 +153,14 @@ fill_pattern <- function (
   
   
   #________________________________________________________
+  # Replace invalid values with defaults, with a warning.
+  #________________________________________________________
+  args <- check_args(single = FALSE, args = list(
+    patterns = patterns, fg = fg, bg = bg, angle = angle, width = width, 
+    height = height, lwd = lwd, lty = lty, fun = fun, min_size = min_size ))
+  
+  
+  #________________________________________________________
   # Convert to a list of grid::pattern() objects.
   #________________________________________________________
   fills <- lapply(seq_along(patterns), function (i) {
@@ -150,16 +168,16 @@ fill_pattern <- function (
     grid::pattern(
       group = FALSE,
       grob  = fillPatternGrob(
-        pattern  = get_i(patterns, i),
-        fg       = get_i(fg,       i),
-        bg       = get_i(bg,       i),
-        angle    = get_i(angle,    i),
-        width    = get_i(width,    i),
-        height   = get_i(height,   i),
-        lwd      = get_i(lwd,      i),
-        lty      = get_i(lty,      i),
-        fun      = get_i(fun,      i),
-        min_size = get_i(min_size, i) ))
+        pattern  = get_i(args$patterns, i),
+        fg       = get_i(args$fg,       i),
+        bg       = get_i(args$bg,       i),
+        angle    = get_i(args$angle,    i),
+        width    = get_i(args$width,    i),
+        height   = get_i(args$height,   i),
+        lwd      = get_i(args$lwd,      i),
+        lty      = get_i(args$lty,      i),
+        fun      = get_i(args$fun,      i),
+        min_size = get_i(args$min_size, i) ))
   })
   
   
@@ -183,9 +201,10 @@ fillPatternGrob <- function (
     min_size = 2 ) {
   
   
-  for (i in setdiff(formalArgs(fillPatternGrob), 'fun'))
-    if (!is_single(val <- get(i, inherits = FALSE)) && length(val) != 1)
-      stop("`", i, "` should be one value, not ", length(val), ".")
+  #________________________________________________________
+  # Replace invalid values with defaults, with a warning.
+  #________________________________________________________
+  list2env(check_args(as.list(environment())), environment())
   
   if (!is.unit(min_size)) min_size <- unit(min_size, 'mm')
   

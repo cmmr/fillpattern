@@ -54,8 +54,10 @@ Default: \code{NA}}
 See \code{\link[graphics:par]{graphics::par()}} for additional details. Default: \code{1}}
 
 \item{lty}{Line type. One of \code{"solid"}, \code{"dashed"}, \code{"dotted"},
-\code{"dotdash"}, \code{"longdash"}, or \code{"twodash"}.
-See \code{\link[graphics:par]{graphics::par()}} for additional details. Default: \code{"solid"}}
+\code{"dotdash"}, \code{"longdash"}, \code{"twodash"}, or \code{"blank"}; an integer
+from 0 to 6; or a string of 2, 4, 6, or 8 hex digits, such as
+\code{"44"} or \code{"1342"}. See \code{\link[graphics:par]{graphics::par()}} for additional details.
+Default: \code{"solid"}}
 
 \item{fun}{A function for modifying graphical parameters immediately
 before rendering. Should accept two parameters: \code{env}, an
@@ -67,8 +69,9 @@ error to force returning from the parent function immediately, or
 
 \item{min_size}{Minimum size of the pattern to draw. Applies to both width
 and height. Useful for avoiding CPU and memory overhead on tiny
-graphical elements. Assumed to be millimeters unless set otherwise
-with \code{\link[=unit]{unit()}}. Default: \code{2}}
+graphical elements. Shapes narrower or shorter than \code{min_size} are
+filled with solid \code{fg} color instead. Assumed to be millimeters
+unless set otherwise with \code{\link[=unit]{unit()}}. Default: \code{2}}
 
 \item{aesthetics}{The names of the aesthetics that this scale works with,
 for instance \code{"pattern_fill"} for geoms from the \pkg{ggpattern}
@@ -90,6 +93,9 @@ that takes \code{n} as an argument and returns the value(s) to use. The
 values are subset or recycled as needed to obtain the same number
 as \code{nlevels(fill)}, where fill is the variable defined by
 \code{aes(fill = )}.
+
+Invalid values give a warning when the plot is built, and are replaced
+with the default for that parameter, as described in \code{\link[=fill_pattern]{fill_pattern()}}.
 }
 \section{Color Mapping}{
 

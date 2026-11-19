@@ -61,8 +61,10 @@ Default: \code{NA}}
 See \code{\link[graphics:par]{graphics::par()}} for additional details. Default: \code{1}}
 
 \item{lty}{Line type. One of \code{"solid"}, \code{"dashed"}, \code{"dotted"},
-\code{"dotdash"}, \code{"longdash"}, or \code{"twodash"}.
-See \code{\link[graphics:par]{graphics::par()}} for additional details. Default: \code{"solid"}}
+\code{"dotdash"}, \code{"longdash"}, \code{"twodash"}, or \code{"blank"}; an integer
+from 0 to 6; or a string of 2, 4, 6, or 8 hex digits, such as
+\code{"44"} or \code{"1342"}. See \code{\link[graphics:par]{graphics::par()}} for additional details.
+Default: \code{"solid"}}
 
 \item{fun}{A function for modifying graphical parameters immediately
 before rendering. Should accept two parameters: \code{env}, an
@@ -74,8 +76,9 @@ error to force returning from the parent function immediately, or
 
 \item{min_size}{Minimum size of the pattern to draw. Applies to both width
 and height. Useful for avoiding CPU and memory overhead on tiny
-graphical elements. Assumed to be millimeters unless set otherwise
-with \code{\link[=unit]{unit()}}. Default: \code{2}}
+graphical elements. Shapes narrower or shorter than \code{min_size} are
+filled with solid \code{fg} color instead. Assumed to be millimeters
+unless set otherwise with \code{\link[=unit]{unit()}}. Default: \code{2}}
 }
 \value{
 \code{fill_pattern()} returns a list of \code{grid::pattern()} objects;
@@ -85,10 +88,17 @@ with \code{\link[=unit]{unit()}}. Default: \code{2}}
 Patterned Fills for Grobs
 }
 \details{
-\code{fillPatternGrob()} expects a single value for each parameter.
-\code{fill_pattern()} can accept a vector of values for each parameter
-which are subset or recycled as needed to obtain the same number as
-\code{length(patterns)}.
+\code{fillPatternGrob()} expects a single value for each parameter,
+and uses the first if given more. \code{fill_pattern()} can accept a
+vector of values for each parameter which are subset or recycled
+as needed to obtain the same number as \code{length(patterns)}.
+
+Invalid values give a warning when the pattern is created, and are
+replaced with the default for that parameter. For an invalid pattern
+name, only the invalid parts are replaced or dropped: \code{"stripes45_lg"}
+becomes \code{"brick45_lg"}, and \code{"fish_huge"} becomes \code{"fish"}. If a pattern
+still can't be drawn, it is filled with solid \code{fg} color instead, with a
+warning that is shown once per session.
 
 When \code{fg} or \code{bg} is \code{NA}, the color is looked up when the pattern is
 drawn: it is the \code{col} of the shape the pattern fills, or \code{"black"} (for

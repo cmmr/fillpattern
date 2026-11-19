@@ -28,14 +28,26 @@ makeContent.fill_pattern <- function (x) {
   remove('x')
   
   #________________________________________________________
-  # Fail gracefully on, e.g., 1-dimensional grobs.
+  # A solid `fg` fill, for shapes too small for a pattern.
+  # `solid` is updated once any `NA` colour is resolved.
+  #________________________________________________________
+  solid      <- gt$fg
+  solid_fill <- function () {
+    grid::gTree(
+      name     = gt$name, 
+      children = grid::gList(grid::rectGrob(gp = grid::gpar(fill = solid))) )
+  }
+  
+  
+  #________________________________________________________
+  # Arguments are validated when the pattern is created, 
+  # so an error here is unexpected. Warn once per session 
+  # and draw a solid fill instead.
   #________________________________________________________
   tryCatch(
     error = function (e) {
-      
-      return (grid::gTree(
-        name     = gt$name, 
-        children = grid::gList(grid::rectGrob(gp = grid::gpar(fill = gt$fg))) ))
+      warn_fallback(e)
+      return (solid_fill())
     },
     expr = local({
       
@@ -48,26 +60,33 @@ makeContent.fill_pattern <- function (x) {
       
       
       #________________________________________________________
-      # Map integers to predefined styles.
+      # Parse the base name and modifiers from the pattern.
       #________________________________________________________
-      if (is.numeric(pattern) && !is.na(pattern) && !pattern %% 1) {
-        
-        choices <- c(
-          "brick", "fish", "stripe45", "hexagon", "shingle45",
-          "wave135", "grid", "octagon", "saw", "grid45",
-          "rshingle90", "fish180", "stripe135", "wave45",
-          "brick135", "saw45", "shingle", "fish90", "rain135",
-          "rshingle135", "rshingle45", "saw90", "stripe",
-          "brick45", "rshingle", "fish270", "fish135", "wave",
-          "shingle90", "saw135", "wave90", "brick90",
-          "fish45", "shingle135", "stripe90" )
-        pattern <- choices[((pattern - 1) %% length(choices)) + 1]
-        remove("choices")
-        
-      } else {
-        pattern <- tolower(trimws(pattern))
-      }
+      spec <- parse_pattern(pattern)
+      if (length(spec$problems)) stop(paste(spec$problems, collapse = " "))
       
+      pattern <- spec$name
+      angle   <- angle + spec$angle
+      if (!is.null(spec$lwd)) lwd <- spec$lwd
+      if (!is.null(spec$lty)) lty <- spec$lty
+      
+      
+      #________________________________________________________
+      # NA colours: inherit from the filled shape's outline.
+      #________________________________________________________
+      if (is_na(fg) || is_na(bg)) {
+        
+        # Only meaningful when all the grob's shapes share one colour.
+        col <- unique(grid::get.gpar('col')$col)
+        if (length(col) != 1) col <- NA
+        
+        fade  <- gt$fade  %||% 1
+        alpha <- gt$alpha %||% 1
+        if (is_na(fg)) fg <- lighten(col, "black", fade, alpha)
+        if (is_na(bg)) bg <- lighten(col, "white", fade, alpha)
+        remove("col", "fade", "alpha")
+      }
+      solid <<- fg
       
       
       #________________________________________________________
@@ -80,39 +99,11 @@ makeContent.fill_pattern <- function (x) {
       if (is.na(height))   height <- width
       stopifnot(is.numeric(c(width, height)))
       
-      
-      
-      #________________________________________________________
-      # Parse LINE and SIZE component(s) from the pattern.
-      #________________________________________________________
-      if (grepl(pattern = '_', x = pattern, fixed = TRUE)) {
-        
-        parts   <- strsplit(pattern, '_')[[1]]
-        pattern <- parts[[1]]
-        
-        for (part in parts[-1]) {
-          
-          if (grepl("(lwd|solid|dashed|dotted|dotdash|longdash|twodash)$", part)) {
-            
-            lwd_mod <- abs(as.numeric(sub("[a-z]+", "", part)))
-            lty_mod <- sub("[^a-z]+", "", part)
-            if (!is.na(lwd_mod) && lwd > 0) lwd <- lwd_mod
-            if (lty_mod != "lwd")           lty <- lty_mod
-            
-          } else {
-            size_mods <- strsplit(part, ':')[[1]]
-            if (grepl(":$", part)) size_mods <- c(size_mods, "")
-            
-            width     <- modify_size(width,  'x', head(size_mods, 1))
-            height    <- modify_size(height, 'y', tail(size_mods, 1))
-          }
-          
-        }
-        
-        remove("parts", "part")
+      for (size in spec$sizes) {
+        width  <- modify_size(width,  'x', size[[1]])
+        height <- modify_size(height, 'y', size[[2]])
       }
-      
-      
+      remove("spec")
       
       
       #________________________________________________________
@@ -123,11 +114,12 @@ makeContent.fill_pattern <- function (x) {
       
       
       #________________________________________________________
-      # Minimum grob size thresholds to continue.
+      # Shapes smaller than min_size (or with no area, e.g.
+      # lines) get a solid fill.
       #________________________________________________________
       min_size <- grid::convertWidth(min_size, 'mm', TRUE)
-      if (w < min_size || w == 0) stop('Insufficent width: ',  w, ' mm')
-      if (h < min_size || h == 0) stop('Insufficent height: ', h, ' mm')
+      if (!isTRUE(w >= min_size && w > 0 && h >= min_size && h > 0))
+        return (solid_fill())
       
       
       
@@ -157,58 +149,6 @@ makeContent.fill_pattern <- function (x) {
       
       
       
-      
-      
-      #________________________________________________________
-      # Parse ANGLE component from the pattern.
-      #________________________________________________________
-      if (grepl(pattern = '^[a-z]+[0-9]+\\.{0,1}[0-9]*$', x = pattern)) {
-        angle_mod <- sub("^[a-z]+", "", pattern)
-        pattern   <- sub(angle_mod, "", pattern, fixed = TRUE)
-        angle     <- angle + as.numeric(angle_mod)
-      }
-      stopifnot(is.numeric(angle) && !is.na(angle))
-      
-      
-      #________________________________________________________
-      # Validate graphical arguments.
-      #________________________________________________________
-      pattern <- local({
-        choices <- c(
-          "brick", "chevron", "fish", "grid", "herringbone", "hexagon", "octagon",
-          "rain", "saw", "shingle", "rshingle", "stripe", "wave", "empty" )
-        tryCatch(
-          expr  = match.arg(arg = pattern, choices = choices),
-          error = function (e) {
-            stop("pattern '", pattern, "' doesn't match options: ", paste(collapse = ", ", choices))
-          })})
-      
-      lty <- local({
-        choices <- c("solid", "dashed", "dotted", "dotdash", "longdash", "twodash")
-        tryCatch(
-          expr  = match.arg(arg = lty, choices = choices),
-          error = function (e) {
-            stop("lty (line type) '", lty, "' doesn't match options: ", paste(collapse = ", ", choices))
-          })})
-      
-      stopifnot(is.numeric(lwd) && length(lwd) == 1 && isTRUE(lwd > 0))
-      
-      
-      #________________________________________________________
-      # NA colours: inherit from the filled shape's outline.
-      #________________________________________________________
-      if (is_na(fg) || is_na(bg)) {
-        
-        # Only meaningful when all the grob's shapes share one colour.
-        col <- unique(grid::get.gpar('col')$col)
-        if (length(col) != 1) col <- NA
-        
-        fade  <- gt$fade  %||% 1
-        alpha <- gt$alpha %||% 1
-        if (is_na(fg)) fg <- lighten(col, "black", fade, alpha)
-        if (is_na(bg)) bg <- lighten(col, "white", fade, alpha)
-        remove("col", "fade", "alpha")
-      }
       
       
       #________________________________________________________
@@ -451,10 +391,7 @@ modify_size <- function (size, axis, str) {
     if (nzchar(u) && !is.na(val)) {
       u <- tryCatch(
         error = function (e) stop("Invalid unit: '", u, "'\n", e), 
-        expr  = match.arg(u, c(
-          "npc", "mm", "points", "picas", "bigpts", "dida", 
-          "cicero", "scaledpts", "lines", "char", "native", "snpc",
-          "in", "inches", "cm" )))
+        expr  = match.arg(u, size_units))
       val <- grid::convertUnit(
         x         = unit(val, units = u), 
         unitTo    = "mm",

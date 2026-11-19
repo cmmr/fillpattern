@@ -1,7 +1,7 @@
 test_that("scale_fill_pattern: internal get_i recycling logic", {
   # We access the internal get_i logic via the generated palette function
   sc <- scale_fill_pattern(
-    patterns = c("p1", "p2"),
+    patterns = c("brick", "fish"),
     fg       = c("red", "blue"),
     width    = 10 # Scalar (length 1)
   )
@@ -11,24 +11,24 @@ test_that("scale_fill_pattern: internal get_i recycling logic", {
   
   # Request 3 items to force recycling of the length-2 vectors
   # Expected: 
-  # 1: p1, red, width=10
-  # 2: p2, blue, width=10
-  # 3: p1, red, width=10 (Recycled)
+  # 1: brick, red, width=10
+  # 2: fish, blue, width=10
+  # 3: brick, red, width=10 (Recycled)
   res <- pal(3)
   
   expect_length(res, 3)
   
   # Check item 1
-  expect_equal(attr(res[[1]], "fillpattern_args")$patterns, "p1")
+  expect_equal(attr(res[[1]], "fillpattern_args")$patterns, "brick")
   expect_equal(attr(res[[1]], "fillpattern_args")$fg, "red")
   expect_equal(attr(res[[1]], "fillpattern_args")$width, 10)
   
   # Check item 2
-  expect_equal(attr(res[[2]], "fillpattern_args")$patterns, "p2")
+  expect_equal(attr(res[[2]], "fillpattern_args")$patterns, "fish")
   expect_equal(attr(res[[2]], "fillpattern_args")$fg, "blue")
   
   # Check item 3 (Recycled)
-  expect_equal(attr(res[[3]], "fillpattern_args")$patterns, "p1")
+  expect_equal(attr(res[[3]], "fillpattern_args")$patterns, "brick")
   expect_equal(attr(res[[3]], "fillpattern_args")$fg, "red")
 })
 
@@ -48,7 +48,7 @@ test_that("scale_fill_pattern: functional parameters evaluation", {
   # (which use is.na(fg)) from triggering a warning when fg is a function.
   sc <- scale_fill_pattern(
     patterns = "brick",
-    fg = function(n) paste0("color", 1:n),
+    fg = function(n) c("red", "blue", "green")[seq_len(n)],
     bg = "transparent", 
     fade = 1
   )
@@ -56,8 +56,8 @@ test_that("scale_fill_pattern: functional parameters evaluation", {
   pal <- sc$palette
   res <- pal(2)
   
-  expect_equal(attr(res[[1]], "fillpattern_args")$fg, "color1")
-  expect_equal(attr(res[[2]], "fillpattern_args")$fg, "color2")
+  expect_equal(attr(res[[1]], "fillpattern_args")$fg, "red")
+  expect_equal(attr(res[[2]], "fillpattern_args")$fg, "blue")
 })
 
 test_that("scale_fill_pattern: distinguishes 'fun' hook from param functions", {

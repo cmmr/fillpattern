@@ -44,6 +44,9 @@
 #'          as `nlevels(fill)`, where fill is the variable defined by 
 #'          `aes(fill = )`.
 #' 
+#' Invalid values give a warning when the plot is built, and are replaced 
+#' with the default for that parameter, as described in [fill_pattern()].
+#' 
 #' @section Color Mapping:
 #' 
 #' When `fg` or `bg` is `NA`, the pattern takes its color from the `colour` 
@@ -111,24 +114,33 @@ scale_fill_pattern <- function (
     
     
     #________________________________________________________
+    # Replace invalid values with defaults, with a warning.
+    #________________________________________________________
+    args <- check_args(single = FALSE, args = list(
+      patterns = patterns, fg = fg, bg = bg, fade = fade, alpha = alpha, 
+      angle = angle, width = width, height = height, lwd = lwd, lty = lty, 
+      fun = fun, min_size = min_size ))
+    
+    
+    #________________________________________________________
     # Real grid patterns that remember their fill_pattern() 
     # arguments, so pattern_alpha() can apply the colour 
     # mapping later.
     #________________________________________________________
     fills <- lapply(seq_len(n), function (i) {
       new_fill_pattern(list(
-          patterns = get_i(patterns, i), 
-          fg       = get_i(fg,       i), 
-          bg       = get_i(bg,       i), 
-          fade     = get_i(fade,     i), 
-          alpha    = get_i(alpha,    i), 
-          angle    = get_i(angle,    i), 
-          width    = get_i(width,    i), 
-          height   = get_i(height,   i), 
-          lwd      = get_i(lwd,      i), 
-          lty      = get_i(lty,      i), 
-          fun      = get_i(fun,      i),
-          min_size = get_i(min_size, i) ))
+          patterns = get_i(args$patterns, i), 
+          fg       = get_i(args$fg,       i), 
+          bg       = get_i(args$bg,       i), 
+          fade     = get_i(args$fade,     i), 
+          alpha    = get_i(args$alpha,    i), 
+          angle    = get_i(args$angle,    i), 
+          width    = get_i(args$width,    i), 
+          height   = get_i(args$height,   i), 
+          lwd      = get_i(args$lwd,      i), 
+          lty      = get_i(args$lty,      i), 
+          fun      = get_i(args$fun,      i),
+          min_size = get_i(args$min_size, i) ))
     })
     
     

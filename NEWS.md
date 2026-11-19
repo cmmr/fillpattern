@@ -1,7 +1,22 @@
 # fillpattern (development version)
 
+## New Features
+
+* **More Line Types:** `lty` accepts every line type that `?par` does: the 
+  six names, `"blank"`, the integers 0 to 6, and hex dash patterns such as 
+  `"44"` or `"1342"` (#11).
+
 ## Bug Fixes
 
+* **Invalid Arguments:** Invalid arguments, such as a misspelled pattern name 
+  or an unsupported `lty`, no longer silently draw a solid block. They now 
+  give a warning when the pattern is created and are replaced with the 
+  default for that argument; an invalid pattern name keeps its valid parts, 
+  so `"stripes45"` becomes `"brick45"`. `fillPatternGrob()` uses the first 
+  value of a longer argument, with a warning, instead of an error. Shapes 
+  smaller than `min_size` are still filled with solid `fg` color, without a 
+  warning, and now use the shape's outline color when `fg = NA`. Any other 
+  failure to draw a pattern warns once per session (#11).
 * **Pattern and Grob Backgrounds:** `bg` can now be a grid pattern, such as 
   `grid::linearGradient()` or another `fill_pattern()`, passed directly or in 
   a list, e.g. `bg = list(grad, "cyan")`. Previously, `fill_pattern()` and 

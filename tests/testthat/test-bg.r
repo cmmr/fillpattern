@@ -25,9 +25,11 @@ test_that("fillPatternGrob() accepts a grid pattern or grob as bg", {
   expect_identical(fillPatternGrob(bg = grad)$bg, grad)
   expect_identical(fillPatternGrob(bg = rect)$bg, rect)
 
-  # Other arguments still need length 1.
-  expect_error(fillPatternGrob(bg = c("red", "blue")), "should be one value")
-  expect_error(fillPatternGrob(fg = list("red", "blue")), "should be one value")
+  # Other arguments still need length 1: the first value is used.
+  expect_warning(g <- fillPatternGrob(bg = c("red", "blue")), "should be one value")
+  expect_equal(g$bg, "red")
+  expect_warning(g <- fillPatternGrob(fg = list("red", "blue")), "should be one value")
+  expect_equal(g$fg, "red")
 })
 
 
@@ -86,9 +88,9 @@ test_that("fill_pattern() recycles grid patterns and grobs as single values", {
     list(circ, pat, "cyan") )
 
   # The old list(list(...)) workaround keeps working.
-  res <- draw(pats[1:2], bg = list(list(grad), "cyan"))
-  expect_identical(unclass(res[[1]]), list(grad))
-  expect_identical(res[[2]], "cyan")
+  expect_identical(
+    draw(pats[1:2], bg = list(list(grad), "cyan")),
+    list(grad, "cyan") )
 })
 
 
