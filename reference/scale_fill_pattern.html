@@ -28,7 +28,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Patterned Fills for ggplot.</h1>
-      <small class="dont-index">Source: <a href="https://github.com/cmmr/fillpattern/blob/v1.0.5/R/scale_fill_pattern.r" class="external-link"><code>R/scale_fill_pattern.r</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/cmmr/fillpattern/blob/main/R/scale_fill_pattern.r" class="external-link"><code>R/scale_fill_pattern.r</code></a></small>
       <div class="d-none name"><code>scale_fill_pattern.Rd</code></div>
     </div>
 
@@ -73,8 +73,9 @@ color scale for the <code><a href="https://ggplot2.tidyverse.org/reference/aes.h
 
 
 <dt id="arg-bg">bg<a class="anchor" aria-label="anchor" href="#arg-bg"></a></dt>
-<dd><p>Background color (or grob), or <code>NA</code> to use the color scale for
-the <code><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes()</a></code> color variable.
+<dd><p>Background color, grid pattern (such as
+<code><a href="https://rdrr.io/r/grid/patterns.html" class="external-link">grid::linearGradient()</a></code>), or grob, or <code>NA</code> to use the color scale
+for the <code><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes()</a></code> color variable.
 Default: <code>ifelse(is.na(fg), "transparent", NA)</code></p></dd>
 
 

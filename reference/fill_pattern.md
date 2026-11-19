@@ -49,8 +49,10 @@ fillPatternGrob(
 
 - bg:
 
-  Background color (or grob), or `NA` to use the outline color (`col`)
-  of the shape being filled. Default: `"transparent"`
+  Background color, grid pattern (such as
+  [`grid::linearGradient()`](https://rdrr.io/r/grid/patterns.html) or
+  another `fill_pattern()`), or grob, or `NA` to use the outline color
+  (`col`) of the shape being filled. Default: `"transparent"`
 
 - angle:
 

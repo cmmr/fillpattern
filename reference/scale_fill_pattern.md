@@ -43,7 +43,9 @@ scale_fill_pattern(
 
 - bg:
 
-  Background color (or grob), or `NA` to use the color scale for the
+  Background color, grid pattern (such as
+  [`grid::linearGradient()`](https://rdrr.io/r/grid/patterns.html)), or
+  grob, or `NA` to use the color scale for the
   [`aes()`](https://ggplot2.tidyverse.org/reference/aes.html) color
   variable. Default: `ifelse(is.na(fg), "transparent", NA)`
 

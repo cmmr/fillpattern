@@ -1,6 +1,28 @@
 # Changelog
 
+## fillpattern (development version)
+
+### Bug Fixes
+
+- **Pattern and Grob Backgrounds:** `bg` can now be a grid pattern, such
+  as [`grid::linearGradient()`](https://rdrr.io/r/grid/patterns.html) or
+  another
+  [`fill_pattern()`](https://cmmr.github.io/fillpattern/reference/fill_pattern.md),
+  passed directly or in a list, e.g. `bg = list(grad, "cyan")`.
+  Previously,
+  [`fill_pattern()`](https://cmmr.github.io/fillpattern/reference/fill_pattern.md)
+  and
+  [`scale_fill_pattern()`](https://cmmr.github.io/fillpattern/reference/scale_fill_pattern.md)
+  split the pattern into its components and quietly drew the wrong
+  colors, and
+  [`fillPatternGrob()`](https://cmmr.github.io/fillpattern/reference/fill_pattern.md)
+  errored. A grob `bg` is now drawn as-is instead of being replaced by a
+  solid `fg`-colored rectangle
+  ([\#10](https://github.com/cmmr/fillpattern/issues/10)).
+
 ## fillpattern 1.0.5
+
+CRAN release: 2026-11-18
 
 ### New Features
 
