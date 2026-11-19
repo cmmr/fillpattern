@@ -29,7 +29,7 @@
 #'        Assumed to be millimeters unless set otherwise with [unit()].
 #'        Default: `NA`
 #'
-#' @param lwd   Line width. A positive number.
+#' @param lwd   Line width. A positive number, or `0` for no lines.
 #'        See [graphics::par()] for additional details. Default: `1`
 #'
 #' @param lty   Line type. One of `"solid"`, `"dashed"`, `"dotted"`, 
@@ -81,7 +81,8 @@
 #' **Base name:**
 #' * Pattern names must always begin with one of `"brick"`, `"chevron"`, 
 #'   `"fish"`, `"grid"`, `"herringbone"`, `"hexagon"`, `"octagon"`, `"rain"`, 
-#'   `"saw"`, `"shingle"`, `"rshingle"`, `"stripe"`, `"wave"`, or `"empty"`.
+#'   `"saw"`, `"shingle"`, `"rshingle"`, `"stripe"`, `"wave"`, or `"empty"`. 
+#'   These are also available as [fill_pattern_names].
 #' * `"empty"` draws no pattern lines, only the `bg` color. This is useful
 #'   for a baseline or control group shown next to patterned groups. Modifiers
 #'   are accepted but have no visible effect.
@@ -110,11 +111,31 @@
 #' * The number component is optional, so `"oct_longdash"` is also valid, and 
 #'   will use `lwd` for the line width.
 #' * To specify just the line width, suffix the number with "lwd": 
-#'   `"grid_2lwd"` will use `lty` for the line style.
+#'   `"grid_2lwd"` will use `lty` for the line style. `"_0lwd"` draws no 
+#'   lines.
 #' 
 #' **Combinations:**
 #' * Modifiers can be combined in any order. For example, `"hex_lg:xl_2dotted"` 
 #'   or `"grid45_dashed_1.4lwd_:6mm_sm:"`.
+#' 
+#' 
+#' @section Tile Size:
+#' 
+#' `width` and `height` set the size of one tile of the pattern. The pattern 
+#' is drawn separately for each shape it fills, so `"npc"` units are relative 
+#' to that shape's bounding box, not to the whole plot or page.
+#' 
+#' Tiles that are out of bounds in both directions are resized when drawn. 
+#' A tile is out of bounds horizontally if it is narrower than 1.5 mm or wider 
+#' than a quarter of the shape, and vertically if it is shorter than 1.5 mm 
+#' or taller than a quarter of the shape. Such a tile is scaled, keeping its 
+#' aspect ratio, by the smallest amount that brings one of its dimensions back 
+#' within bounds. This keeps several tiles visible in small shapes such as 
+#' legend keys, and keeps patterns from becoming too fine to see. So the 
+#' drawn size may not exactly match `width` and `height`.
+#' 
+#' Shapes narrower or shorter than `min_size` are filled with solid `fg` 
+#' color instead of a pattern.
 #' 
 #' 
 #' @seealso [scale_fill_pattern()] for `ggplot2` integration.

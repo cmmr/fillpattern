@@ -57,7 +57,7 @@ unless set otherwise with \code{\link[=unit]{unit()}}. Default: \code{5}}
 Assumed to be millimeters unless set otherwise with \code{\link[=unit]{unit()}}.
 Default: \code{NA}}
 
-\item{lwd}{Line width. A positive number.
+\item{lwd}{Line width. A positive number, or \code{0} for no lines.
 See \code{\link[graphics:par]{graphics::par()}} for additional details. Default: \code{1}}
 
 \item{lty}{Line type. One of \code{"solid"}, \code{"dashed"}, \code{"dotted"},
@@ -114,6 +114,7 @@ qualifies if all of them have the same \code{col}.
 \item Pattern names must always begin with one of \code{"brick"}, \code{"chevron"},
 \code{"fish"}, \code{"grid"}, \code{"herringbone"}, \code{"hexagon"}, \code{"octagon"}, \code{"rain"},
 \code{"saw"}, \code{"shingle"}, \code{"rshingle"}, \code{"stripe"}, \code{"wave"}, or \code{"empty"}.
+These are also available as \link{fill_pattern_names}.
 \item \code{"empty"} draws no pattern lines, only the \code{bg} color. This is useful
 for a baseline or control group shown next to patterned groups. Modifiers
 are accepted but have no visible effect.
@@ -148,7 +149,8 @@ example, \code{"shingle_0.5dashed"} or \code{"wave_2solid"}.
 \item The number component is optional, so \code{"oct_longdash"} is also valid, and
 will use \code{lwd} for the line width.
 \item To specify just the line width, suffix the number with "lwd":
-\code{"grid_2lwd"} will use \code{lty} for the line style.
+\code{"grid_2lwd"} will use \code{lty} for the line style. \code{"_0lwd"} draws no
+lines.
 }
 
 \strong{Combinations:}
@@ -156,6 +158,26 @@ will use \code{lwd} for the line width.
 \item Modifiers can be combined in any order. For example, \code{"hex_lg:xl_2dotted"}
 or \code{"grid45_dashed_1.4lwd_:6mm_sm:"}.
 }
+}
+
+\section{Tile Size}{
+
+
+\code{width} and \code{height} set the size of one tile of the pattern. The pattern
+is drawn separately for each shape it fills, so \code{"npc"} units are relative
+to that shape's bounding box, not to the whole plot or page.
+
+Tiles that are out of bounds in both directions are resized when drawn.
+A tile is out of bounds horizontally if it is narrower than 1.5 mm or wider
+than a quarter of the shape, and vertically if it is shorter than 1.5 mm
+or taller than a quarter of the shape. Such a tile is scaled, keeping its
+aspect ratio, by the smallest amount that brings one of its dimensions back
+within bounds. This keeps several tiles visible in small shapes such as
+legend keys, and keeps patterns from becoming too fine to see. So the
+drawn size may not exactly match \code{width} and \code{height}.
+
+Shapes narrower or shorter than \code{min_size} are filled with solid \code{fg}
+color instead of a pattern.
 }
 
 \examples{

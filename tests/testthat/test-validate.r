@@ -40,7 +40,7 @@ test_that("parse_pattern() keeps the valid parts of an invalid spec", {
   expect_equal(pp("stripes45")$clean,       "brick45")
   expect_equal(pp("s")$clean,               "brick") # ambiguous
   expect_equal(pp("fish_huge_dashed")$clean, "fish_dashed")
-  expect_equal(pp("grid_0lwd_lg")$clean,    "grid_lg")
+  expect_equal(pp("grid_lwdx_lg")$clean,    "grid_lg")
   expect_equal(pp("grid_1:2:3")$clean,      "grid")
   expect_equal(pp("grid_*0")$clean,         "grid")
   expect_equal(pp("grid_/-2")$clean,        "grid")
@@ -96,7 +96,7 @@ test_that("fillPatternGrob() replaces invalid values, with a warning", {
   fix(width    = -1,            value = 5)
   fix(width    = unit(-1, "mm"), value = 5)
   fix(height   = "tall",        value = NA)
-  fix(lwd      = 0,             value = 1)
+  fix(lwd      = -1,            value = 1)
   fix(lwd      = NA,            value = 1)
   fix(lty      = "bogus",       value = "solid")
   fix(lty      = 9,             value = "solid")

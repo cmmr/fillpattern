@@ -157,6 +157,7 @@ makeContent.fill_pattern <- function (x) {
       vp <- if (angle %% 360) grid::viewport(angle = -angle)
       bg <- if (grid::is.grob(bg)) bg else 
         if (!identical(bg, "transparent")) grid::rectGrob(gp = grid::gpar(fill = bg))
+      if (lwd == 0) lty <- "blank" # Most devices draw lwd = 0 as a thin line.
       gp <- grid::gpar(col = fg, lwd = lwd, lty = lty)
       
       if (is.function(fun)) {

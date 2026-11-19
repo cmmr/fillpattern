@@ -4,7 +4,10 @@ importFrom(methods, formalArgs, is)
 importFrom(utils, head, tail)
 
 export(fill_pattern)
+export(fill_pattern_names)
+export(fill_pattern_order)
 export(fillPatternGrob)
+export(pal_fill_pattern)
 export(scale_fill_pattern)
 export(unit)
 

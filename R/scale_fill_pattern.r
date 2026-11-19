@@ -4,8 +4,9 @@
 #'
 #' @param patterns   A vector of pattern names that will be subset or recycled 
 #'        as needed to match the levels of the `aes()` fill variable. If 
-#'        integers are provided, they are mapped to predefined patterns. 
-#'        See "Details" and "Pattern Names" sections below. Default: `seq_len`
+#'        integers are provided, they are mapped to the patterns in 
+#'        [fill_pattern_order]. See "Details" and "Pattern Names" sections 
+#'        below. Default: `seq_len`
 #' 
 #' @param fg   Foreground color for the pattern's lines, or `NA` to use the 
 #'        color scale for the `aes()` color variable. Default: `NA`
@@ -35,7 +36,12 @@
 #'        `guide`.
 #' 
 #' 
-#' @return A [ggplot2::discrete_scale()] object.
+#' @return `scale_fill_pattern()` returns a [ggplot2::discrete_scale()] 
+#'         object. `pal_fill_pattern()` returns a palette: a function that 
+#'         takes a number of levels, `n`, and returns a list of `n` 
+#'         [grid::pattern()] objects. Use it as 
+#'         `theme(palette.fill.discrete = pal_fill_pattern())` (ggplot2 4.0 or 
+#'         later), or as the palette of another package's scale.
 #' 
 #' 
 #' @details All of the parameters can accept a vector of values or a function 
@@ -83,6 +89,12 @@
 #'         lty      = c("solid", "twodash", "dotted"),
 #'         lwd      = c(2, 3, 1) ) +
 #'       theme(legend.key.size = unit(2, 'cm'))
+#'     
+#'     # Patterns as the default discrete fill palette (ggplot2 >= 4.0).
+#'     if (packageVersion("ggplot2") >= "4.0.0")
+#'       ggplot(mpg, aes(x = drv, fill = drv)) +
+#'         geom_bar() +
+#'         theme(palette.fill.discrete = pal_fill_pattern(fg = "black"))
 #'  }
 
 scale_fill_pattern <- function (
@@ -101,13 +113,41 @@ scale_fill_pattern <- function (
     aesthetics = "fill",
     ... ) {
   
+  # Arguments stay lazy until the palette is called, as before.
+  palette <- pal_fill_pattern(
+    patterns = patterns, fg = fg, bg = bg, fade = fade, alpha = alpha, 
+    angle = angle, width = width, height = height, lwd = lwd, lty = lty, 
+    fun = fun, min_size = min_size )
   
-  fill_palette <- function (n) {
+  ggplot2::discrete_scale(aesthetics = aesthetics, palette = palette, ...)
+}
+
+
+
+#' @rdname scale_fill_pattern
+#' @export
+
+pal_fill_pattern <- function (
+    patterns = seq_len, 
+    fg       = NA, 
+    bg       = ifelse(is.na(fg), "transparent", NA), 
+    fade     = ifelse(is.na(fg), 1, 0.6), 
+    alpha    = 1, 
+    angle    = 0, 
+    width    = unit(1/10, 'npc'), 
+    height   = NA, 
+    lwd      = 1, 
+    lty      = "solid",
+    fun      = NULL,
+    min_size = 2 ) {
+  
+  
+  function (n) {
     
     #________________________________________________________
     # Call any functions passed to parameters
     #________________________________________________________
-    for (i in setdiff(formalArgs(scale_fill_pattern), c('aesthetics', '...')))
+    for (i in formalArgs(pal_fill_pattern))
       if (is.function(v <- get(i)))
         if (!identical(formalArgs(v), c('env', 'row')))
           assign(i, v(n))
@@ -152,9 +192,6 @@ scale_fill_pattern <- function (
     
     return (fills)
   }
-  
-  
-  ggplot2::discrete_scale(aesthetics = aesthetics, palette = fill_palette, ...)
 }
 
 

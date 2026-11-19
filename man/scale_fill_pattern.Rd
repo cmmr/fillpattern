@@ -2,6 +2,7 @@
 % Please edit documentation in R/scale_fill_pattern.r
 \name{scale_fill_pattern}
 \alias{scale_fill_pattern}
+\alias{pal_fill_pattern}
 \title{Patterned Fills for ggplot.}
 \usage{
 scale_fill_pattern(
@@ -20,12 +21,28 @@ scale_fill_pattern(
   aesthetics = "fill",
   ...
 )
+
+pal_fill_pattern(
+  patterns = seq_len,
+  fg = NA,
+  bg = ifelse(is.na(fg), "transparent", NA),
+  fade = ifelse(is.na(fg), 1, 0.6),
+  alpha = 1,
+  angle = 0,
+  width = unit(1/10, "npc"),
+  height = NA,
+  lwd = 1,
+  lty = "solid",
+  fun = NULL,
+  min_size = 2
+)
 }
 \arguments{
 \item{patterns}{A vector of pattern names that will be subset or recycled
 as needed to match the levels of the \code{aes()} fill variable. If
-integers are provided, they are mapped to predefined patterns.
-See "Details" and "Pattern Names" sections below. Default: \code{seq_len}}
+integers are provided, they are mapped to the patterns in
+\link{fill_pattern_order}. See "Details" and "Pattern Names" sections
+below. Default: \code{seq_len}}
 
 \item{fg}{Foreground color for the pattern's lines, or \code{NA} to use the
 color scale for the \code{aes()} color variable. Default: \code{NA}}
@@ -50,7 +67,7 @@ unless set otherwise with \code{\link[=unit]{unit()}}. Default: \code{unit(1/10,
 Assumed to be millimeters unless set otherwise with \code{\link[=unit]{unit()}}.
 Default: \code{NA}}
 
-\item{lwd}{Line width. A positive number.
+\item{lwd}{Line width. A positive number, or \code{0} for no lines.
 See \code{\link[graphics:par]{graphics::par()}} for additional details. Default: \code{1}}
 
 \item{lty}{Line type. One of \code{"solid"}, \code{"dashed"}, \code{"dotted"},
@@ -82,7 +99,12 @@ as \code{name}, \code{breaks}, \code{labels}, \code{limits}, \code{na.value}, \c
 \code{guide}.}
 }
 \value{
-A \code{\link[ggplot2:discrete_scale]{ggplot2::discrete_scale()}} object.
+\code{scale_fill_pattern()} returns a \code{\link[ggplot2:discrete_scale]{ggplot2::discrete_scale()}}
+object. \code{pal_fill_pattern()} returns a palette: a function that
+takes a number of levels, \code{n}, and returns a list of \code{n}
+\code{\link[grid:pattern]{grid::pattern()}} objects. Use it as
+\code{theme(palette.fill.discrete = pal_fill_pattern())} (ggplot2 4.0 or
+later), or as the palette of another package's scale.
 }
 \description{
 Patterned Fills for ggplot.
@@ -118,6 +140,7 @@ flows an outline color with \code{outline.type = "full"}.
 \item Pattern names must always begin with one of \code{"brick"}, \code{"chevron"},
 \code{"fish"}, \code{"grid"}, \code{"herringbone"}, \code{"hexagon"}, \code{"octagon"}, \code{"rain"},
 \code{"saw"}, \code{"shingle"}, \code{"rshingle"}, \code{"stripe"}, \code{"wave"}, or \code{"empty"}.
+These are also available as \link{fill_pattern_names}.
 \item \code{"empty"} draws no pattern lines, only the \code{bg} color. This is useful
 for a baseline or control group shown next to patterned groups. Modifiers
 are accepted but have no visible effect.
@@ -152,7 +175,8 @@ example, \code{"shingle_0.5dashed"} or \code{"wave_2solid"}.
 \item The number component is optional, so \code{"oct_longdash"} is also valid, and
 will use \code{lwd} for the line width.
 \item To specify just the line width, suffix the number with "lwd":
-\code{"grid_2lwd"} will use \code{lty} for the line style.
+\code{"grid_2lwd"} will use \code{lty} for the line style. \code{"_0lwd"} draws no
+lines.
 }
 
 \strong{Combinations:}
@@ -160,6 +184,26 @@ will use \code{lwd} for the line width.
 \item Modifiers can be combined in any order. For example, \code{"hex_lg:xl_2dotted"}
 or \code{"grid45_dashed_1.4lwd_:6mm_sm:"}.
 }
+}
+
+\section{Tile Size}{
+
+
+\code{width} and \code{height} set the size of one tile of the pattern. The pattern
+is drawn separately for each shape it fills, so \code{"npc"} units are relative
+to that shape's bounding box, not to the whole plot or page.
+
+Tiles that are out of bounds in both directions are resized when drawn.
+A tile is out of bounds horizontally if it is narrower than 1.5 mm or wider
+than a quarter of the shape, and vertically if it is shorter than 1.5 mm
+or taller than a quarter of the shape. Such a tile is scaled, keeping its
+aspect ratio, by the smallest amount that brings one of its dimensions back
+within bounds. This keeps several tiles visible in small shapes such as
+legend keys, and keeps patterns from becoming too fine to see. So the
+drawn size may not exactly match \code{width} and \code{height}.
+
+Shapes narrower or shorter than \code{min_size} are filled with solid \code{fg}
+color instead of a pattern.
 }
 
 \examples{
@@ -183,6 +227,12 @@ or \code{"grid45_dashed_1.4lwd_:6mm_sm:"}.
         lty      = c("solid", "twodash", "dotted"),
         lwd      = c(2, 3, 1) ) +
       theme(legend.key.size = unit(2, 'cm'))
+    
+    # Patterns as the default discrete fill palette (ggplot2 >= 4.0).
+    if (packageVersion("ggplot2") >= "4.0.0")
+      ggplot(mpg, aes(x = drv, fill = drv)) +
+        geom_bar() +
+        theme(palette.fill.discrete = pal_fill_pattern(fg = "black"))
  }
 }
 \seealso{

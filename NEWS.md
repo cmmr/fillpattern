@@ -2,6 +2,16 @@
 
 ## New Features
 
+* **Pattern Name Lists:** `fill_pattern_names` lists the 14 base pattern 
+  names, and `fill_pattern_order` lists the 35 patterns that numbers (and the 
+  default `scale_fill_pattern(patterns = seq_len)`) map to 
+  (trevorld/gridpattern#141).
+* **Palette Function:** New `pal_fill_pattern()` returns the palette that 
+  `scale_fill_pattern()` uses, for `theme(palette.fill.discrete = )` in 
+  ggplot2 4.0 or later, or for other packages' scales 
+  (trevorld/gridpattern#141).
+* **No Lines:** `lwd = 0`, or the `"_0lwd"` pattern modifier, now draws no 
+  pattern lines (trevorld/gridpattern#141).
 * **More Line Types:** `lty` accepts every line type that `?par` does: the 
   six names, `"blank"`, the integers 0 to 6, and hex dash patterns such as 
   `"44"` or `"1342"` (#11).
@@ -24,6 +34,12 @@
   drew the wrong colors, and `fillPatternGrob()` errored. A grob `bg` is now 
   drawn as-is instead of being replaced by a solid `fg`-colored rectangle 
   (#10).
+
+## Documentation
+
+* **Tile Size:** A new "Tile Size" section explains how `width` and `height` 
+  are interpreted per shape, and when tiles are resized to stay between 
+  1.5 mm and a quarter of the shape (trevorld/gridpattern#141).
 
 
 # fillpattern 1.0.5

@@ -8,22 +8,6 @@
 
 
 
-#' Base pattern names, and the patterns that numeric `pattern` values map to.
-#' @noRd
-pattern_names <- c(
-  "brick", "chevron", "fish", "grid", "herringbone", "hexagon", "octagon",
-  "rain", "saw", "shingle", "rshingle", "stripe", "wave", "empty" )
-
-pattern_index <- c(
-  "brick", "fish", "stripe45", "hexagon", "shingle45",
-  "wave135", "grid", "octagon", "saw", "grid45",
-  "rshingle90", "fish180", "stripe135", "wave45",
-  "brick135", "saw45", "shingle", "fish90", "rain135",
-  "rshingle135", "rshingle45", "saw90", "stripe",
-  "brick45", "rshingle", "fish270", "fish135", "wave",
-  "shingle90", "saw135", "wave90", "brick90",
-  "fish45", "shingle135", "stripe90" )
-
 arg_defaults <- list(
   pattern = "brick", patterns = "brick", fg = "black", bg = "transparent",
   angle = 0, width = 5, height = NA, lwd = 1, lty = "solid", fun = NULL,
@@ -46,7 +30,7 @@ size_units <- c(
 #' @noRd
 #' @keywords internal
 #'
-#' @param pattern   A pattern name, or an index into `pattern_index`.
+#' @param pattern   A pattern name, or an index into `fill_pattern_order`.
 #'
 #' @return A list with `name` (full base name), `angle` (degrees to add),
 #'         `lwd` and `lty` (`NULL` unless set by a modifier), `sizes` (a list
@@ -72,7 +56,7 @@ parse_pattern <- function (pattern) {
       res$clean <- "brick"
       return (res)
     }
-    pattern <- pattern_index[[(pattern - 1) %% length(pattern_index) + 1]]
+    pattern <- fill_pattern_order[[(pattern - 1) %% length(fill_pattern_order) + 1]]
   }
 
   if (!is.character(pattern) || length(pattern) != 1 || is.na(pattern)) {
@@ -94,15 +78,15 @@ parse_pattern <- function (pattern) {
   name  <- if (length(m)) m[[2]] else base
   angle <- if (length(m)) m[[3]] else ""
 
-  if (is.na(pmatch(name, pattern_names))) {
+  if (is.na(pmatch(name, fill_pattern_names))) {
     problem(
       "\"", name, "\" isn't a pattern name, or an unambiguous ",
       "abbreviation of one. Use one of ", 
-      paste(collapse = ", ", dQuote(pattern_names, FALSE)), "." )
+      paste(collapse = ", ", dQuote(fill_pattern_names, FALSE)), "." )
     name <- "brick"
   }
 
-  res$name <- pattern_names[[pmatch(name, pattern_names)]]
+  res$name <- fill_pattern_names[[pmatch(name, fill_pattern_names)]]
   if (nzchar(angle)) res$angle <- as.numeric(angle)
   keep <- paste0(name, angle)
 
@@ -122,11 +106,6 @@ parse_pattern <- function (pattern) {
 
       lwd_mod <- as.numeric(sub("[a-z]+$", "", part))
       lty_mod <- sub("^[0-9.]*", "", part)
-
-      if (!is.na(lwd_mod) && lwd_mod <= 0) {
-        problem("Line width modifier \"", part, "\" must be greater than zero.")
-        next
-      }
 
       if (!is.na(lwd_mod))  res$lwd <- lwd_mod
       if (lty_mod != "lwd") res$lty <- lty_mod
@@ -311,8 +290,8 @@ check_value <- function (arg, val, label = arg) {
     },
 
     lwd = {
-      if (!is.numeric(val) || length(val) != 1 || !isTRUE(is.finite(val) && val > 0))
-        return (fix("Use a positive number.", 1))
+      if (!is.numeric(val) || length(val) != 1 || !isTRUE(is.finite(val) && val >= 0))
+        return (fix("Use a positive number, or 0 for no lines.", 1))
     },
 
     lty = {
