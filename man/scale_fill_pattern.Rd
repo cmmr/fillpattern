@@ -30,8 +30,9 @@ See "Details" and "Pattern Names" sections below. Default: \code{seq_len}}
 \item{fg}{Foreground color for the pattern's lines, or \code{NA} to use the
 color scale for the \code{aes()} color variable. Default: \code{NA}}
 
-\item{bg}{Background color (or grob), or \code{NA} to use the color scale for
-the \code{aes()} color variable.
+\item{bg}{Background color, grid pattern (such as
+\code{\link[grid:linearGradient]{grid::linearGradient()}}), or grob, or \code{NA} to use the color scale
+for the \code{aes()} color variable.
 Default: \code{ifelse(is.na(fg), "transparent", NA)}}
 
 \item{fade, alpha}{Modify the color from the \code{aes()} color scale. Fade will

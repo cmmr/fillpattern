@@ -215,7 +215,8 @@ makeContent.fill_pattern <- function (x) {
       # Allow the user to make custom modifications.
       #________________________________________________________
       vp <- if (angle %% 360) grid::viewport(angle = -angle)
-      bg <- if (!identical(bg, "transparent")) grid::rectGrob(gp = grid::gpar(fill = bg))
+      bg <- if (grid::is.grob(bg)) bg else 
+        if (!identical(bg, "transparent")) grid::rectGrob(gp = grid::gpar(fill = bg))
       gp <- grid::gpar(col = fg, lwd = lwd, lty = lty)
       
       if (is.function(fun)) {

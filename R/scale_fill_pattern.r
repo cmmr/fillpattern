@@ -10,8 +10,9 @@
 #' @param fg   Foreground color for the pattern's lines, or `NA` to use the 
 #'        color scale for the `aes()` color variable. Default: `NA`
 #' 
-#' @param bg   Background color (or grob), or `NA` to use the color scale for 
-#'        the `aes()` color variable.
+#' @param bg   Background color, grid pattern (such as 
+#'        [grid::linearGradient()]), or grob, or `NA` to use the color scale 
+#'        for the `aes()` color variable.
 #'        Default: `ifelse(is.na(fg), "transparent", NA)`
 #'        
 #' @param fade,alpha   Modify the color from the `aes()` color scale. Fade will 
@@ -96,15 +97,6 @@ scale_fill_pattern <- function (
     min_size = 2,
     aesthetics = "fill",
     ... ) {
-  
-  
-  #________________________________________________________
-  # Fetch the i-th value from val, subsetting/recycling.
-  #________________________________________________________
-  get_i <- function (val, i) {
-    if (length(val) <= 1) return (val)
-    return (val[[(i - 1) %% length(val) + 1]])
-  }
   
   
   fill_palette <- function (n) {
@@ -288,7 +280,8 @@ aes_row <- function (i) {
 build_pattern <- function (args) {
   
   # Make key glyphs visible for scale_fill_pattern(fg = "white").
-  if (all(c(args$fg, args$bg) %in% c("white", "#FFFFFF", "#FFFFFFFF")))
+  is_white <- function (x) is.character(x) && all(x %in% c("white", "#FFFFFF", "#FFFFFFFF"))
+  if (is_white(args$fg) && is_white(args$bg))
     args$fg <- "black"
   
   names(args)[names(args) == 'patterns'] <- 'pattern'
@@ -348,6 +341,26 @@ lighten <- function (color, default, fade, alpha) {
 }
 
 
+
+
+#' Fetch the i-th value from `val`, subsetting/recycling.
+#' 
+#' A grid pattern or grob is one value, even though it is a list.
+#' @noRd
+get_i <- function (val, i) {
+  if (is_single(val) || length(val) <= 1) return (val)
+  return (val[[(i - 1) %% length(val) + 1]])
+}
+
+
+#' Is `x` a grid pattern (e.g. `grid::linearGradient()`) or a grob?
+#' 
+#' These are lists, but each one is a single `fg` or `bg` value.
+#' Neither grid nor ggplot2 exports an `is_pattern()` helper.
+#' @noRd
+is_single <- function (x) {
+  inherits(x, "GridPattern") || grid::is.grob(x)
+}
 
 
 #' Is `x` a single NA (and not, e.g., a grob)?

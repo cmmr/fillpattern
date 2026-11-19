@@ -42,8 +42,10 @@ Default: \code{"brick"}}
 \item{fg}{Foreground color, for the pattern's lines, or \code{NA} to use the
 outline color (\code{col}) of the shape being filled. Default: \code{"black"}}
 
-\item{bg}{Background color (or grob), or \code{NA} to use the outline color
-(\code{col}) of the shape being filled. Default: \code{"transparent"}}
+\item{bg}{Background color, grid pattern (such as
+\code{\link[grid:linearGradient]{grid::linearGradient()}} or another \code{fill_pattern()}), or grob,
+or \code{NA} to use the outline color (\code{col}) of the shape being
+filled. Default: \code{"transparent"}}
 
 \item{angle}{How much the rotate the pattern, given in degrees clockwise.
 Default: \code{0}}

@@ -14,8 +14,10 @@
 #' @param fg   Foreground color, for the pattern's lines, or `NA` to use the
 #'        outline color (`col`) of the shape being filled. Default: `"black"`
 #'
-#' @param bg   Background color (or grob), or `NA` to use the outline color 
-#'        (`col`) of the shape being filled. Default: `"transparent"`
+#' @param bg   Background color, grid pattern (such as 
+#'        [grid::linearGradient()] or another `fill_pattern()`), or grob, 
+#'        or `NA` to use the outline color (`col`) of the shape being 
+#'        filled. Default: `"transparent"`
 #'
 #' @param angle   How much the rotate the pattern, given in degrees clockwise.
 #'        Default: `0`
@@ -141,15 +143,6 @@ fill_pattern <- function (
   
   
   #________________________________________________________
-  # Fetch the i-th value from val, subsetting/recycling.
-  #________________________________________________________
-  get_i <- function (val, i) {
-    if (length(val) <= 1) return (val)
-    return (val[[(i - 1) %% length(val) + 1]])
-  }
-  
-  
-  #________________________________________________________
   # Convert to a list of grid::pattern() objects.
   #________________________________________________________
   fills <- lapply(seq_along(patterns), function (i) {
@@ -191,7 +184,7 @@ fillPatternGrob <- function (
   
   
   for (i in setdiff(formalArgs(fillPatternGrob), 'fun'))
-    if (length(val <- get(i, inherits = FALSE)) != 1)
+    if (!is_single(val <- get(i, inherits = FALSE)) && length(val) != 1)
       stop("`", i, "` should be one value, not ", length(val), ".")
   
   if (!is.unit(min_size)) min_size <- unit(min_size, 'mm')
