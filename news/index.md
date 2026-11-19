@@ -2,8 +2,38 @@
 
 ## fillpattern (development version)
 
+### New Features
+
+- **Pattern Name Lists:** `fill_pattern_names` lists the 14 base pattern
+  names, and `fill_pattern_order` lists the 35 patterns that numbers
+  (and the default `scale_fill_pattern(patterns = seq_len)`) map to
+  (trevorld/gridpattern#141).
+- **Palette Function:** New
+  [`pal_fill_pattern()`](https://cmmr.github.io/fillpattern/reference/scale_fill_pattern.md)
+  returns the palette that
+  [`scale_fill_pattern()`](https://cmmr.github.io/fillpattern/reference/scale_fill_pattern.md)
+  uses, for `theme(palette.fill.discrete = )` in ggplot2 4.0 or later,
+  or for other packages’ scales (trevorld/gridpattern#141).
+- **No Lines:** `lwd = 0`, or the `"_0lwd"` pattern modifier, now draws
+  no pattern lines (trevorld/gridpattern#141).
+- **More Line Types:** `lty` accepts every line type that
+  [`?par`](https://rdrr.io/r/graphics/par.html) does: the six names,
+  `"blank"`, the integers 0 to 6, and hex dash patterns such as `"44"`
+  or `"1342"` ([\#11](https://github.com/cmmr/fillpattern/issues/11)).
+
 ### Bug Fixes
 
+- **Invalid Arguments:** Invalid arguments, such as a misspelled pattern
+  name or an unsupported `lty`, no longer silently draw a solid block.
+  They now give a warning when the pattern is created and are replaced
+  with the default for that argument; an invalid pattern name keeps its
+  valid parts, so `"stripes45"` becomes `"brick45"`.
+  [`fillPatternGrob()`](https://cmmr.github.io/fillpattern/reference/fill_pattern.md)
+  uses the first value of a longer argument, with a warning, instead of
+  an error. Shapes smaller than `min_size` are still filled with solid
+  `fg` color, without a warning, and now use the shape’s outline color
+  when `fg = NA`. Any other failure to draw a pattern warns once per
+  session ([\#11](https://github.com/cmmr/fillpattern/issues/11)).
 - **Pattern and Grob Backgrounds:** `bg` can now be a grid pattern, such
   as [`grid::linearGradient()`](https://rdrr.io/r/grid/patterns.html) or
   another
@@ -19,6 +49,12 @@
   errored. A grob `bg` is now drawn as-is instead of being replaced by a
   solid `fg`-colored rectangle
   ([\#10](https://github.com/cmmr/fillpattern/issues/10)).
+
+### Documentation
+
+- **Tile Size:** A new “Tile Size” section explains how `width` and
+  `height` are interpreted per shape, and when tiles are resized to stay
+  between 1.5 mm and a quarter of the shape (trevorld/gridpattern#141).
 
 ## fillpattern 1.0.5
 

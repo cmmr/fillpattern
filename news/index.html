@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">fillpattern</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.5.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.5.9001</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -34,9 +34,27 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="fillpattern-development-version">fillpattern (development version)<a class="anchor" aria-label="anchor" href="#fillpattern-development-version"></a></h2>
 <div class="section level3">
+<h3 id="new-features-development-version">New Features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
+<ul><li>
+<strong>Pattern Name Lists:</strong> <code>fill_pattern_names</code> lists the 14 base pattern names, and <code>fill_pattern_order</code> lists the 35 patterns that numbers (and the default <code>scale_fill_pattern(patterns = seq_len)</code>) map to (trevorld/gridpattern#141).</li>
+<li>
+<strong>Palette Function:</strong> New <code><a href="../reference/scale_fill_pattern.html">pal_fill_pattern()</a></code> returns the palette that <code><a href="../reference/scale_fill_pattern.html">scale_fill_pattern()</a></code> uses, for <code>theme(palette.fill.discrete = )</code> in ggplot2 4.0 or later, or for other packages’ scales (trevorld/gridpattern#141).</li>
+<li>
+<strong>No Lines:</strong> <code>lwd = 0</code>, or the <code>"_0lwd"</code> pattern modifier, now draws no pattern lines (trevorld/gridpattern#141).</li>
+<li>
+<strong>More Line Types:</strong> <code>lty</code> accepts every line type that <code><a href="https://rdrr.io/r/graphics/par.html" class="external-link">?par</a></code> does: the six names, <code>"blank"</code>, the integers 0 to 6, and hex dash patterns such as <code>"44"</code> or <code>"1342"</code> (<a href="https://github.com/cmmr/fillpattern/issues/11" class="external-link">#11</a>).</li>
+</ul></div>
+<div class="section level3">
 <h3 id="bug-fixes-development-version">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
 <ul><li>
+<strong>Invalid Arguments:</strong> Invalid arguments, such as a misspelled pattern name or an unsupported <code>lty</code>, no longer silently draw a solid block. They now give a warning when the pattern is created and are replaced with the default for that argument; an invalid pattern name keeps its valid parts, so <code>"stripes45"</code> becomes <code>"brick45"</code>. <code><a href="../reference/fill_pattern.html">fillPatternGrob()</a></code> uses the first value of a longer argument, with a warning, instead of an error. Shapes smaller than <code>min_size</code> are still filled with solid <code>fg</code> color, without a warning, and now use the shape’s outline color when <code>fg = NA</code>. Any other failure to draw a pattern warns once per session (<a href="https://github.com/cmmr/fillpattern/issues/11" class="external-link">#11</a>).</li>
+<li>
 <strong>Pattern and Grob Backgrounds:</strong> <code>bg</code> can now be a grid pattern, such as <code><a href="https://rdrr.io/r/grid/patterns.html" class="external-link">grid::linearGradient()</a></code> or another <code><a href="../reference/fill_pattern.html">fill_pattern()</a></code>, passed directly or in a list, e.g. <code>bg = list(grad, "cyan")</code>. Previously, <code><a href="../reference/fill_pattern.html">fill_pattern()</a></code> and <code><a href="../reference/scale_fill_pattern.html">scale_fill_pattern()</a></code> split the pattern into its components and quietly drew the wrong colors, and <code><a href="../reference/fill_pattern.html">fillPatternGrob()</a></code> errored. A grob <code>bg</code> is now drawn as-is instead of being replaced by a solid <code>fg</code>-colored rectangle (<a href="https://github.com/cmmr/fillpattern/issues/10" class="external-link">#10</a>).</li>
+</ul></div>
+<div class="section level3">
+<h3 id="documentation-development-version">Documentation<a class="anchor" aria-label="anchor" href="#documentation-development-version"></a></h3>
+<ul><li>
+<strong>Tile Size:</strong> A new “Tile Size” section explains how <code>width</code> and <code>height</code> are interpreted per shape, and when tiles are resized to stay between 1.5 mm and a quarter of the shape (trevorld/gridpattern#141).</li>
 </ul></div>
 </div>
     <div class="section level2">

@@ -21,6 +21,21 @@ scale_fill_pattern(
   aesthetics = "fill",
   ...
 )
+
+pal_fill_pattern(
+  patterns = seq_len,
+  fg = NA,
+  bg = ifelse(is.na(fg), "transparent", NA),
+  fade = ifelse(is.na(fg), 1, 0.6),
+  alpha = 1,
+  angle = 0,
+  width = unit(1/10, "npc"),
+  height = NA,
+  lwd = 1,
+  lty = "solid",
+  fun = NULL,
+  min_size = 2
+)
 ```
 
 ## Arguments
@@ -30,9 +45,9 @@ scale_fill_pattern(
   A vector of pattern names that will be subset or recycled as needed to
   match the levels of the
   [`aes()`](https://ggplot2.tidyverse.org/reference/aes.html) fill
-  variable. If integers are provided, they are mapped to predefined
-  patterns. See "Details" and "Pattern Names" sections below. Default:
-  `seq_len`
+  variable. If integers are provided, they are mapped to the patterns in
+  [fill_pattern_order](https://cmmr.github.io/fillpattern/reference/fill_pattern_names.md).
+  See "Details" and "Pattern Names" sections below. Default: `seq_len`
 
 - fg:
 
@@ -77,14 +92,15 @@ scale_fill_pattern(
 
 - lwd:
 
-  Line width. A positive number. See
+  Line width. A positive number, or `0` for no lines. See
   [`graphics::par()`](https://rdrr.io/r/graphics/par.html) for
   additional details. Default: `1`
 
 - lty:
 
   Line type. One of `"solid"`, `"dashed"`, `"dotted"`, `"dotdash"`,
-  `"longdash"`, or `"twodash"`. See
+  `"longdash"`, `"twodash"`, or `"blank"`; an integer from 0 to 6; or a
+  string of 2, 4, 6, or 8 hex digits, such as `"44"` or `"1342"`. See
   [`graphics::par()`](https://rdrr.io/r/graphics/par.html) for
   additional details. Default: `"solid"`
 
@@ -102,8 +118,10 @@ scale_fill_pattern(
 
   Minimum size of the pattern to draw. Applies to both width and height.
   Useful for avoiding CPU and memory overhead on tiny graphical
-  elements. Assumed to be millimeters unless set otherwise with
-  [`unit()`](https://rdrr.io/r/grid/unit.html). Default: `2`
+  elements. Shapes narrower or shorter than `min_size` are filled with
+  solid `fg` color instead. Assumed to be millimeters unless set
+  otherwise with [`unit()`](https://rdrr.io/r/grid/unit.html). Default:
+  `2`
 
 - aesthetics:
 
@@ -120,9 +138,13 @@ scale_fill_pattern(
 
 ## Value
 
-A
+`scale_fill_pattern()` returns a
 [`ggplot2::discrete_scale()`](https://ggplot2.tidyverse.org/reference/discrete_scale.html)
-object.
+object. `pal_fill_pattern()` returns a palette: a function that takes a
+number of levels, `n`, and returns a list of `n`
+[`grid::pattern()`](https://rdrr.io/r/grid/patterns.html) objects. Use
+it as `theme(palette.fill.discrete = pal_fill_pattern())` (ggplot2 4.0
+or later), or as the palette of another package's scale.
 
 ## Details
 
@@ -130,6 +152,10 @@ All of the parameters can accept a vector of values or a function that
 takes `n` as an argument and returns the value(s) to use. The values are
 subset or recycled as needed to obtain the same number as
 `nlevels(fill)`, where fill is the variable defined by `aes(fill = )`.
+
+Invalid values give a warning when the plot is built, and are replaced
+with the default for that parameter, as described in
+[`fill_pattern()`](https://cmmr.github.io/fillpattern/reference/fill_pattern.md).
 
 ## Color Mapping
 
@@ -151,7 +177,8 @@ flows an outline color with `outline.type = "full"`.
 - Pattern names must always begin with one of `"brick"`, `"chevron"`,
   `"fish"`, `"grid"`, `"herringbone"`, `"hexagon"`, `"octagon"`,
   `"rain"`, `"saw"`, `"shingle"`, `"rshingle"`, `"stripe"`, `"wave"`, or
-  `"empty"`.
+  `"empty"`. These are also available as
+  [fill_pattern_names](https://cmmr.github.io/fillpattern/reference/fill_pattern_names.md).
 
 - `"empty"` draws no pattern lines, only the `bg` color. This is useful
   for a baseline or control group shown next to patterned groups.
@@ -193,12 +220,32 @@ flows an outline color with `outline.type = "full"`.
   and will use `lwd` for the line width.
 
 - To specify just the line width, suffix the number with "lwd":
-  `"grid_2lwd"` will use `lty` for the line style.
+  `"grid_2lwd"` will use `lty` for the line style. `"_0lwd"` draws no
+  lines.
 
 **Combinations:**
 
 - Modifiers can be combined in any order. For example,
   `"hex_lg:xl_2dotted"` or `"grid45_dashed_1.4lwd_:6mm_sm:"`.
+
+## Tile Size
+
+`width` and `height` set the size of one tile of the pattern. The
+pattern is drawn separately for each shape it fills, so `"npc"` units
+are relative to that shape's bounding box, not to the whole plot or
+page.
+
+Tiles that are out of bounds in both directions are resized when drawn.
+A tile is out of bounds horizontally if it is narrower than 1.5 mm or
+wider than a quarter of the shape, and vertically if it is shorter than
+1.5 mm or taller than a quarter of the shape. Such a tile is scaled,
+keeping its aspect ratio, by the smallest amount that brings one of its
+dimensions back within bounds. This keeps several tiles visible in small
+shapes such as legend keys, and keeps patterns from becoming too fine to
+see. So the drawn size may not exactly match `width` and `height`.
+
+Shapes narrower or shorter than `min_size` are filled with solid `fg`
+color instead of a pattern.
 
 ## See also
 
@@ -230,6 +277,13 @@ for base `grid` graphics integration.
         lty      = c("solid", "twodash", "dotted"),
         lwd      = c(2, 3, 1) ) +
       theme(legend.key.size = unit(2, 'cm'))
+
+    
+    # Patterns as the default discrete fill palette (ggplot2 >= 4.0).
+    if (packageVersion("ggplot2") >= "4.0.0")
+      ggplot(mpg, aes(x = drv, fill = drv)) +
+        geom_bar() +
+        theme(palette.fill.discrete = pal_fill_pattern(fg = "black"))
 
  # }
 ```

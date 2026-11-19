@@ -14,13 +14,13 @@ Source:
 [`DESCRIPTION`](https://github.com/cmmr/fillpattern/blob/main/DESCRIPTION)
 
 Smith D (2026). *fillpattern: Patterned Fills for 'ggplot2' and 'grid'
-Graphics*. R package version 1.0.5.9000,
+Graphics*. R package version 1.0.5.9001,
 <https://cmmr.github.io/fillpattern/>.
 
     @Manual{,
       title = {fillpattern: Patterned Fills for 'ggplot2' and 'grid' Graphics},
       author = {Daniel P. Smith},
       year = {2026},
-      note = {R package version 1.0.5.9000},
+      note = {R package version 1.0.5.9001},
       url = {https://cmmr.github.io/fillpattern/},
     }

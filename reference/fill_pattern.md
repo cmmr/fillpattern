@@ -73,14 +73,15 @@ fillPatternGrob(
 
 - lwd:
 
-  Line width. A positive number. See
+  Line width. A positive number, or `0` for no lines. See
   [`graphics::par()`](https://rdrr.io/r/graphics/par.html) for
   additional details. Default: `1`
 
 - lty:
 
   Line type. One of `"solid"`, `"dashed"`, `"dotted"`, `"dotdash"`,
-  `"longdash"`, or `"twodash"`. See
+  `"longdash"`, `"twodash"`, or `"blank"`; an integer from 0 to 6; or a
+  string of 2, 4, 6, or 8 hex digits, such as `"44"` or `"1342"`. See
   [`graphics::par()`](https://rdrr.io/r/graphics/par.html) for
   additional details. Default: `"solid"`
 
@@ -98,8 +99,10 @@ fillPatternGrob(
 
   Minimum size of the pattern to draw. Applies to both width and height.
   Useful for avoiding CPU and memory overhead on tiny graphical
-  elements. Assumed to be millimeters unless set otherwise with
-  [`unit()`](https://rdrr.io/r/grid/unit.html). Default: `2`
+  elements. Shapes narrower or shorter than `min_size` are filled with
+  solid `fg` color instead. Assumed to be millimeters unless set
+  otherwise with [`unit()`](https://rdrr.io/r/grid/unit.html). Default:
+  `2`
 
 ## Value
 
@@ -110,10 +113,17 @@ fillPatternGrob(
 
 ## Details
 
-`fillPatternGrob()` expects a single value for each parameter.
-`fill_pattern()` can accept a vector of values for each parameter which
-are subset or recycled as needed to obtain the same number as
-`length(patterns)`.
+`fillPatternGrob()` expects a single value for each parameter, and uses
+the first if given more. `fill_pattern()` can accept a vector of values
+for each parameter which are subset or recycled as needed to obtain the
+same number as `length(patterns)`.
+
+Invalid values give a warning when the pattern is created, and are
+replaced with the default for that parameter. For an invalid pattern
+name, only the invalid parts are replaced or dropped: `"stripes45_lg"`
+becomes `"brick45_lg"`, and `"fish_huge"` becomes `"fish"`. If a pattern
+still can't be drawn, it is filled with solid `fg` color instead, with a
+warning that is shown once per session.
 
 When `fg` or `bg` is `NA`, the color is looked up when the pattern is
 drawn: it is the `col` of the shape the pattern fills, or `"black"` (for
@@ -128,7 +138,8 @@ only qualifies if all of them have the same `col`.
 - Pattern names must always begin with one of `"brick"`, `"chevron"`,
   `"fish"`, `"grid"`, `"herringbone"`, `"hexagon"`, `"octagon"`,
   `"rain"`, `"saw"`, `"shingle"`, `"rshingle"`, `"stripe"`, `"wave"`, or
-  `"empty"`.
+  `"empty"`. These are also available as
+  [fill_pattern_names](https://cmmr.github.io/fillpattern/reference/fill_pattern_names.md).
 
 - `"empty"` draws no pattern lines, only the `bg` color. This is useful
   for a baseline or control group shown next to patterned groups.
@@ -170,12 +181,32 @@ only qualifies if all of them have the same `col`.
   and will use `lwd` for the line width.
 
 - To specify just the line width, suffix the number with "lwd":
-  `"grid_2lwd"` will use `lty` for the line style.
+  `"grid_2lwd"` will use `lty` for the line style. `"_0lwd"` draws no
+  lines.
 
 **Combinations:**
 
 - Modifiers can be combined in any order. For example,
   `"hex_lg:xl_2dotted"` or `"grid45_dashed_1.4lwd_:6mm_sm:"`.
+
+## Tile Size
+
+`width` and `height` set the size of one tile of the pattern. The
+pattern is drawn separately for each shape it fills, so `"npc"` units
+are relative to that shape's bounding box, not to the whole plot or
+page.
+
+Tiles that are out of bounds in both directions are resized when drawn.
+A tile is out of bounds horizontally if it is narrower than 1.5 mm or
+wider than a quarter of the shape, and vertically if it is shorter than
+1.5 mm or taller than a quarter of the shape. Such a tile is scaled,
+keeping its aspect ratio, by the smallest amount that brings one of its
+dimensions back within bounds. This keeps several tiles visible in small
+shapes such as legend keys, and keeps patterns from becoming too fine to
+see. So the drawn size may not exactly match `width` and `height`.
+
+Shapes narrower or shorter than `min_size` are filled with solid `fg`
+color instead of a pattern.
 
 ## See also
 
