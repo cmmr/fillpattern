@@ -44,8 +44,8 @@ test_that("scale_fill_pattern: internal fill_palette name preservation", {
 test_that("scale_fill_pattern: functional parameters evaluation", {
   # Test that fill_palette executes functions passed as parameters (e.g. fg(n))
   # fg is a function of n.
-  # CRITICAL: We explicitly provide bg and fade to prevent the default arguments
-  # (which use is.na(fg)) from triggering a warning when fg is a function.
+  # bg and fade are given explicitly here; their defaults with a function
+  # fg are tested in test-palette-functions.r.
   sc <- scale_fill_pattern(
     patterns = "brick",
     fg = function(n) c("red", "blue", "green")[seq_len(n)],

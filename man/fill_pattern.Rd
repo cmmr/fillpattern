@@ -92,6 +92,9 @@ Patterned Fills for Grobs
 and uses the first if given more. \code{fill_pattern()} can accept a
 vector of values for each parameter which are subset or recycled
 as needed to obtain the same number as \code{length(patterns)}.
+Except for \code{patterns} and \code{fun}, each can also be a function that
+takes \code{n = length(patterns)} and returns the values to use, such
+as a color palette like \code{bg = hcl.colors}.
 
 Invalid values give a warning when the pattern is created, and are
 replaced with the default for that parameter. For an invalid pattern
@@ -202,6 +205,12 @@ color instead of a pattern.
     fill <- fill_pattern("stripe45", fg = NA)
     grid.circle(x = 1/4, r = 1/5, gp = gpar(col = "red",  fill = fill))
     grid.circle(x = 3/4, r = 1/5, gp = gpar(col = "blue", fill = fill))
+    
+    # A color palette function is called with the number of patterns.
+    grid.newpage()
+    fills <- fill_pattern(c("brick", "fish", "grid"), fg = "white", bg = hcl.colors)
+    for (i in 1:3)
+      grid.rect(x = (i - 0.5) / 3, width = 0.3, gp = gpar(fill = fills[[i]]))
 }
 \seealso{
 \code{\link[=scale_fill_pattern]{scale_fill_pattern()}} for \code{ggplot2} integration.

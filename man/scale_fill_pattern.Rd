@@ -8,8 +8,8 @@
 scale_fill_pattern(
   patterns = seq_len,
   fg = NA,
-  bg = ifelse(is.na(fg), "transparent", NA),
-  fade = ifelse(is.na(fg), 1, 0.6),
+  bg = NULL,
+  fade = NULL,
   alpha = 1,
   angle = 0,
   width = unit(1/10, "npc"),
@@ -25,8 +25,8 @@ scale_fill_pattern(
 pal_fill_pattern(
   patterns = seq_len,
   fg = NA,
-  bg = ifelse(is.na(fg), "transparent", NA),
-  fade = ifelse(is.na(fg), 1, 0.6),
+  bg = NULL,
+  fade = NULL,
   alpha = 1,
   angle = 0,
   width = unit(1/10, "npc"),
@@ -49,13 +49,14 @@ color scale for the \code{aes()} color variable. Default: \code{NA}}
 
 \item{bg}{Background color, grid pattern (such as
 \code{\link[grid:linearGradient]{grid::linearGradient()}}), or grob, or \code{NA} to use the color scale
-for the \code{aes()} color variable.
-Default: \code{ifelse(is.na(fg), "transparent", NA)}}
+for the \code{aes()} color variable. Default: \code{NULL}, which means
+\code{"transparent"} where \code{fg} is \code{NA}, and \code{NA} elsewhere.}
 
 \item{fade, alpha}{Modify the color from the \code{aes()} color scale. Fade will
 make it more white, and alpha will make it more transparent. Both
 values must be between 0 and 1, inclusive, where 1 means unchanged.
-Default: \verb{fade = ifelse(is.na(fg), 1, 0.6), alpha = 1}}
+Default: \code{fade = NULL}, which means 1 where \code{fg} is \code{NA} and 0.6
+elsewhere; \code{alpha = 1}}
 
 \item{angle}{How much the rotate the pattern, given in degrees clockwise.
 Default: \code{0}}
@@ -114,7 +115,9 @@ All of the parameters can accept a vector of values or a function
 that takes \code{n} as an argument and returns the value(s) to use. The
 values are subset or recycled as needed to obtain the same number
 as \code{nlevels(fill)}, where fill is the variable defined by
-\code{aes(fill = )}.
+\code{aes(fill = )}. For example, a color palette function such as
+\code{bg = hcl.colors} or \code{fg = viridisLite::viridis} gives each level
+its own color.
 
 Invalid values give a warning when the plot is built, and are replaced
 with the default for that parameter, as described in \code{\link[=fill_pattern]{fill_pattern()}}.
@@ -227,6 +230,11 @@ color instead of a pattern.
         lty      = c("solid", "twodash", "dotted"),
         lwd      = c(2, 3, 1) ) +
       theme(legend.key.size = unit(2, 'cm'))
+    
+    # A color palette function gives each level its own background.
+    ggplot(mpg, aes(x = drv, fill = drv)) +
+      geom_bar() +
+      scale_fill_pattern(fg = "black", bg = function (n) hcl.colors(n, "Pastel 1"))
     
     # Patterns as the default discrete fill palette (ggplot2 >= 4.0).
     if (packageVersion("ggplot2") >= "4.0.0")

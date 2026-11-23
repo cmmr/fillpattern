@@ -56,7 +56,10 @@
 #' @details `fillPatternGrob()` expects a single value for each parameter, 
 #'          and uses the first if given more. `fill_pattern()` can accept a 
 #'          vector of values for each parameter which are subset or recycled 
-#'          as needed to obtain the same number as `length(patterns)`.
+#'          as needed to obtain the same number as `length(patterns)`. 
+#'          Except for `patterns` and `fun`, each can also be a function that 
+#'          takes `n = length(patterns)` and returns the values to use, such 
+#'          as a color palette like `bg = hcl.colors`.
 #' 
 #' Invalid values give a warning when the pattern is created, and are 
 #' replaced with the default for that parameter. For an invalid pattern 
@@ -163,6 +166,12 @@
 #'     fill <- fill_pattern("stripe45", fg = NA)
 #'     grid.circle(x = 1/4, r = 1/5, gp = gpar(col = "red",  fill = fill))
 #'     grid.circle(x = 3/4, r = 1/5, gp = gpar(col = "blue", fill = fill))
+#'     
+#'     # A color palette function is called with the number of patterns.
+#'     grid.newpage()
+#'     fills <- fill_pattern(c("brick", "fish", "grid"), fg = "white", bg = hcl.colors)
+#'     for (i in 1:3)
+#'       grid.rect(x = (i - 0.5) / 3, width = 0.3, gp = gpar(fill = fills[[i]]))
 
 fill_pattern <- function (
     patterns = "brick", fg = "black", bg = "transparent",
@@ -171,6 +180,14 @@ fill_pattern <- function (
   
   n <- length(patterns)
   if (n == 0) return (list())
+  
+  
+  #________________________________________________________
+  # Call any functions passed to parameters, such as color 
+  # palettes, with the number of patterns.
+  #________________________________________________________
+  for (i in c('fg', 'bg', 'angle', 'width', 'height', 'lwd', 'lty', 'min_size'))
+    if (is.function(v <- get(i))) assign(i, v(n))
   
   
   #________________________________________________________
