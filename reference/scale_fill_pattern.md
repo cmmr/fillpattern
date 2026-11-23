@@ -8,8 +8,8 @@ Patterned Fills for ggplot.
 scale_fill_pattern(
   patterns = seq_len,
   fg = NA,
-  bg = ifelse(is.na(fg), "transparent", NA),
-  fade = ifelse(is.na(fg), 1, 0.6),
+  bg = NULL,
+  fade = NULL,
   alpha = 1,
   angle = 0,
   width = unit(1/10, "npc"),
@@ -25,8 +25,8 @@ scale_fill_pattern(
 pal_fill_pattern(
   patterns = seq_len,
   fg = NA,
-  bg = ifelse(is.na(fg), "transparent", NA),
-  fade = ifelse(is.na(fg), 1, 0.6),
+  bg = NULL,
+  fade = NULL,
   alpha = 1,
   angle = 0,
   width = unit(1/10, "npc"),
@@ -62,7 +62,8 @@ pal_fill_pattern(
   [`grid::linearGradient()`](https://rdrr.io/r/grid/patterns.html)), or
   grob, or `NA` to use the color scale for the
   [`aes()`](https://ggplot2.tidyverse.org/reference/aes.html) color
-  variable. Default: `ifelse(is.na(fg), "transparent", NA)`
+  variable. Default: `NULL`, which means `"transparent"` where `fg` is
+  `NA`, and `NA` elsewhere.
 
 - fade, alpha:
 
@@ -70,8 +71,8 @@ pal_fill_pattern(
   [`aes()`](https://ggplot2.tidyverse.org/reference/aes.html) color
   scale. Fade will make it more white, and alpha will make it more
   transparent. Both values must be between 0 and 1, inclusive, where 1
-  means unchanged. Default:
-  `fade = ifelse(is.na(fg), 1, 0.6), alpha = 1`
+  means unchanged. Default: `fade = NULL`, which means 1 where `fg` is
+  `NA` and 0.6 elsewhere; `alpha = 1`
 
 - angle:
 
@@ -152,6 +153,8 @@ All of the parameters can accept a vector of values or a function that
 takes `n` as an argument and returns the value(s) to use. The values are
 subset or recycled as needed to obtain the same number as
 `nlevels(fill)`, where fill is the variable defined by `aes(fill = )`.
+For example, a color palette function such as `bg = hcl.colors` or
+`fg = viridisLite::viridis` gives each level its own color.
 
 Invalid values give a warning when the plot is built, and are replaced
 with the default for that parameter, as described in
@@ -277,6 +280,12 @@ for base `grid` graphics integration.
         lty      = c("solid", "twodash", "dotted"),
         lwd      = c(2, 3, 1) ) +
       theme(legend.key.size = unit(2, 'cm'))
+
+    
+    # A color palette function gives each level its own background.
+    ggplot(mpg, aes(x = drv, fill = drv)) +
+      geom_bar() +
+      scale_fill_pattern(fg = "black", bg = function (n) hcl.colors(n, "Pastel 1"))
 
     
     # Patterns as the default discrete fill palette (ggplot2 >= 4.0).

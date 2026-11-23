@@ -14,6 +14,13 @@
   [`scale_fill_pattern()`](https://cmmr.github.io/fillpattern/reference/scale_fill_pattern.md)
   uses, for `theme(palette.fill.discrete = )` in ggplot2 4.0 or later,
   or for other packages’ scales (trevorld/gridpattern#141).
+- **Color Palette Functions:**
+  [`fill_pattern()`](https://cmmr.github.io/fillpattern/reference/fill_pattern.md)
+  now accepts a function for any argument except `patterns` and `fun`,
+  called with the number of patterns, like
+  [`scale_fill_pattern()`](https://cmmr.github.io/fillpattern/reference/scale_fill_pattern.md)
+  already did. So a color palette such as `bg = hcl.colors` gives each
+  pattern its own color.
 - **No Lines:** `lwd = 0`, or the `"_0lwd"` pattern modifier, now draws
   no pattern lines (trevorld/gridpattern#141).
 - **More Line Types:** `lty` accepts every line type that
@@ -23,6 +30,11 @@
 
 ### Bug Fixes
 
+- **Palette Functions in the Scale:**
+  `scale_fill_pattern(fg = <function>)` no longer warns “is.na() applied
+  to non-(list or vector) of type ‘closure’”. The `bg` and `fade`
+  defaults are now `NULL`, and are worked out after `fg` is evaluated,
+  with the same results as before.
 - **Invalid Arguments:** Invalid arguments, such as a misspelled pattern
   name or an unsupported `lty`, no longer silently draw a solid block.
   They now give a warning when the pattern is created and are replaced
